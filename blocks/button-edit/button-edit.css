@@ -1,0 +1,18 @@
+.button-edit {
+    background-color: black;
+    border: none;
+    padding: 0;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+@media (min-width: 1024px) {
+    .button-edit {
+        margin-left: 18px;
+    }
+}
+
+.button-edit:hover {
+    opacity: .6;
+    transition: 200ms;
+}

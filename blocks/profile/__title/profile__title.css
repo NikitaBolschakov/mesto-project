@@ -1,0 +1,13 @@
+.profile__title {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    margin: 26px auto 8px;
+}
+
+@media (min-width: 1024px) {
+    .profile__title {
+        justify-content: flex-start;
+        margin: 22px 0 8px 30px;
+    }
+}

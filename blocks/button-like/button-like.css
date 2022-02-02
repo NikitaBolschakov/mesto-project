@@ -1,0 +1,20 @@
+.button-like {
+        background-color: white;
+        border: none;
+        padding: 0;
+        margin-right: 20px;
+        align-self: center;
+        height: min-content;
+        cursor: pointer;
+    }
+    
+    .button-like:hover {
+        opacity: .5;
+        transition: 200ms;
+    }
+
+    .button-like:active {
+        background-image: url(../../images/button-like-active.svg);
+        background-repeat: no-repeat;
+        opacity: 1;
+    }

@@ -1,0 +1,17 @@
+/*Этим элементом реализована адаптивность блока header в промежуточных расширениях экрана*/
+.header__responsive {
+    max-width: calc(320px - (2*27px));
+    margin: auto;
+}
+
+@media (min-width: 768px) {
+    .header__responsive {
+        max-width: calc((2*282px) + 17px);
+    }
+}
+
+@media (min-width: 1024px) {
+    .header__responsive {
+        max-width: calc((282px*3) + (17px*2));
+    }
+}

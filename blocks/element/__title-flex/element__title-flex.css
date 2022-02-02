@@ -1,0 +1,4 @@
+.element__title-flex {
+    display: flex;
+    justify-content: space-between;
+}

@@ -1,0 +1,42 @@
+.popup__field {
+    font-family: inherit;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    width: 238px;
+    height: 27px;
+    padding: 0 0 5px 2px;
+    margin: auto;
+    margin-bottom: 24px;
+    border: none;
+    border-bottom: rgba(0, 0, 0, .2) solid 1px;
+}
+
+@media (min-width: 1024px) {
+    .popup__field {
+        width: 358px;
+        height: 37px;
+        padding: 0 0 0 2px;
+        margin-bottom: 20px;
+    }
+}
+
+/*Отступы для второго текстового поля*/
+.popup__field:nth-of-type(2) {
+    margin-bottom: 45px;
+}
+
+/*Стиль активного поля*/
+.popup__field:focus {
+    outline: none;
+    border-bottom: rgba(0, 0, 0, 1) solid 1px;
+}
+
+/*Стили плейсхолдеров*/
+.popup__field::placeholder {
+    font-family: inherit;
+    color: black;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+}

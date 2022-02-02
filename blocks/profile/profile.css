@@ -1,0 +1,13 @@
+.profile {
+    color: white;
+    min-width: 282px;
+    margin: 0 19px 36px;
+}
+
+@media (min-width: 1024px) {
+    .profile {
+        display: flex;
+        max-width: 880px;
+        margin: auto;
+    }
+}
