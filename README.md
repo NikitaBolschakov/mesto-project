@@ -9,7 +9,7 @@
 
 Реализация социальной сети "Mesto"
 
-* [Ссылка на проект](https://nikitabolschakov.github.io/russian-travel/)
+* [Ссылка на проект](https://nikitabolschakov.github.io/mesto-project/)
 
 ### Figma ###
 
