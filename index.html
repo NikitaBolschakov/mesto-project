@@ -11,26 +11,6 @@
 
 <body class="page">
 
-    <div class="popup__backdrop popup_opened">
-        <div class="popup">
-            <button class="popup__button-close" name="close" type="button">
-                <img src="./images/close_mobile.svg" alt="Закрыть">
-            </button>
-            <div class="popup__container">
-                <h2 class="popup__heading">Редактировать профиль</h2>
-                <form class="popup__form">
-                    <fieldset class="popup__fieldset">
-                        <input class="popup__field" placeholder="Имя" type="text" name="name" value="Мануэль Вальс"
-                            aria-label="name">
-                        <input class="popup__field" placeholder="О себе" type="text" name="status"
-                            value="Политический деятель" aria-label="status">
-                    </fieldset>
-                    <button class="popup__button-submit" name="submit" type="submit">Сохранить</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <header class="header">
         <div class="header__responsive">
             <img class="header__logo" src="./images/logo.svg" alt="Логотип">
@@ -39,23 +19,32 @@
 
     <main>
         <section class="profile">
-            <img class="profile__avatar" src="./images/avatarr.jpg" alt="Аватар пользователя">
+            <img class="profile__avatar" src="./images/ragnar.jpg" alt="Аватар пользователя">
             <div class="profile__info">
                 <div class="profile__title">
-                    <h1 class="profile__name">Мануэль Вальс</h1>
+                    <h1 class="profile__name">Рагнар Аксельссон</h1>
                     <button class="button-edit" name="user_name" type="button"><img src="./images/edit-button.svg"
                             alt="Редактировать" class="button-edit__image"></button>
                 </div>
-                <p class="profile__status">Политический деятель</p>
+                <p class="profile__status">Исландский фотограф</p>
             </div>
-            <button class="button-add" name="new_photo" type="button"><img src="./images/plusik.svg" alt="Добавить"
+            <button class="button-add" name="new_photo" type="button"><img src="./images/button-add.svg" alt="Добавить"
                     class="button-add__image">
             </button>
         </section>
 
         <section class="gallery">
             <div class="element">
-                <img src="./images/vogar.jpg" alt="Фарерские острова" class="element__image">
+                <img src="./images/Greenland.jpg" alt="Гренландия" class="element__image">
+                <div class="element__title-flex">
+                    <p class="element__title">Гренландия</p>
+                    <button class="button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
+                            class="button-like__image"></button>
+                </div>
+            </div>
+
+            <div class="element">
+                <img src="./images/portret.jpg" alt="Фарерские острова" class="element__image">
                 <div class="element__title-flex">
                     <p class="element__title">Фарерские острова</p>
                     <button class="button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
@@ -64,45 +53,36 @@
             </div>
 
             <div class="element">
-                <img src="./images/kab-bal.jpg" alt="Кабардино-Балкария" class="element__image">
+                <img src="./images/yakut.jpg" alt="Якутия" class="element__image">
                 <div class="element__title-flex">
-                    <p class="element__title">Кабардино-Балкария</p>
+                    <p class="element__title">Якутия</p>
                     <button class="button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
                             class="button-like__image"></button>
                 </div>
             </div>
 
             <div class="element">
-                <img src="./images/kolskiy.jpg" alt="Хибины" class="element__image">
+                <img src="./images/island.jpg" alt="Исландия" class="element__image">
                 <div class="element__title-flex">
-                    <p class="element__title">Хибины</p>
+                    <p class="element__title">Исландия</p>
                     <button class="button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
                             class="button-like__image"></button>
                 </div>
             </div>
 
             <div class="element">
-                <img src="./images/Serbia.jpg" alt="Сербия" class="element__image">
+                <img src="./images/siberia.jpg" alt="Сибирь" class="element__image">
                 <div class="element__title-flex">
-                    <p class="element__title">Сербия</p>
+                    <p class="element__title">Сибирь</p>
                     <button class="button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
                             class="button-like__image"></button>
                 </div>
             </div>
 
             <div class="element">
-                <img src="./images/dagestan.jpg" alt="Дагестан" class="element__image">
+                <img src="./images/alyaska.jpg" alt="Остров Баффинова Земля. Канада" class="element__image">
                 <div class="element__title-flex">
-                    <p class="element__title">Дагестан</p>
-                    <button class="button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
-                            class="button-like__image"></button>
-                </div>
-            </div>
-
-            <div class="element">
-                <img src="./images/kar-cher.jpg" alt="Карачаево-Черкессия" class="element__image">
-                <div class="element__title-flex">
-                    <p class="element__title">Карачаево-Черкессия</p>
+                    <p class="element__title">о. Баффинова Земля</p>
                     <button class="button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
                             class="button-like__image"></button>
                 </div>
@@ -113,6 +93,27 @@
     <footer class="footer">
         <p class="footer__copyright">&#169; 2022 Mesto Russia</p>
     </footer>
+
+    <div class="popup__backdrop"> <!--Add here popup_opened-->
+        <div class="popup">
+            <button class="popup__button-close" name="close" type="button">
+                <img src="./images/close_mobile.svg" alt="Закрыть">
+            </button>
+            <div class="popup__container">
+                <h2 class="popup__heading">Редактировать профиль</h2>
+                <form class="popup__form">
+                    <fieldset class="popup__fieldset">
+                        <input class="popup__field" placeholder="Имя" type="text" name="name" value="Рагнар Аксельссон"
+                            aria-label="name">
+                        <input class="popup__field" placeholder="О себе" type="text" name="status"
+                            value="Исландский фотограф" aria-label="status">
+                    </fieldset>
+                    <button class="popup__button-submit" name="submit" type="submit">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
