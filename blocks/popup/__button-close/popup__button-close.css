@@ -1,6 +1,6 @@
 .popup__button-close {
     display: flex;
-    margin: 0 0 16px auto;
+    margin: -36px 0 16px auto;
     background-color: rgba(0, 0, 0, 0);
     border: none;
     padding: 0;
@@ -11,7 +11,7 @@
     .popup__button-close {
         display: flex;
         align-items: stretch;
-        margin: 0 -40px 8px auto;
+        margin: -40px -40px 8px auto;
         right: 385px;
         width: 32px;
         height: 32px;

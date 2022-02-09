@@ -23,13 +23,13 @@
             <div class="profile__info">
                 <div class="profile__title">
                     <h1 class="profile__name">Рагнар Аксельссон</h1>
-                    <button class="button-edit" name="user_name" type="button"><img src="./images/edit-button.svg"
-                            alt="Редактировать" class="button-edit__image"></button>
+                    <button class="profile__button-edit" name="user_name" type="button"><img src="./images/edit-button.svg"
+                            alt="Редактировать" class="profile__button-edit-img"></button>
                 </div>
                 <p class="profile__status">Исландский фотограф</p>
             </div>
-            <button class="button-add" name="new_photo" type="button"><img src="./images/button-add.svg" alt="Добавить"
-                    class="button-add__image">
+            <button class="profile__button-add" name="new_photo" type="button"><img src="./images/button-add.svg" alt="Добавить"
+                    class="profile__button-add-img">
             </button>
         </section>
 
@@ -38,8 +38,8 @@
                 <img src="./images/Greenland.jpg" alt="Гренландия" class="element__image">
                 <div class="element__title-flex">
                     <p class="element__title">Гренландия</p>
-                    <button class="button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
-                            class="button-like__image"></button>
+                    <button class="element__button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
+                            class="element__button-like-img"></button>
                 </div>
             </div>
 
@@ -47,8 +47,8 @@
                 <img src="./images/portret.jpg" alt="Фарерские острова" class="element__image">
                 <div class="element__title-flex">
                     <p class="element__title">Фарерские острова</p>
-                    <button class="button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
-                            class="button-like__image"></button>
+                    <button class="element__button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
+                            class="element__button-like-img"></button>
                 </div>
             </div>
 
@@ -56,8 +56,8 @@
                 <img src="./images/yakut.jpg" alt="Якутия" class="element__image">
                 <div class="element__title-flex">
                     <p class="element__title">Якутия</p>
-                    <button class="button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
-                            class="button-like__image"></button>
+                    <button class="element__button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
+                            class="element__button-like-img"></button>
                 </div>
             </div>
 
@@ -65,8 +65,8 @@
                 <img src="./images/island.jpg" alt="Исландия" class="element__image">
                 <div class="element__title-flex">
                     <p class="element__title">Исландия</p>
-                    <button class="button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
-                            class="button-like__image"></button>
+                    <button class="element__button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
+                            class="element__button-like-img"></button>
                 </div>
             </div>
 
@@ -74,8 +74,8 @@
                 <img src="./images/siberia.jpg" alt="Сибирь" class="element__image">
                 <div class="element__title-flex">
                     <p class="element__title">Сибирь</p>
-                    <button class="button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
-                            class="button-like__image"></button>
+                    <button class="element__button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
+                            class="element__button-like-img"></button>
                 </div>
             </div>
 
@@ -83,8 +83,8 @@
                 <img src="./images/alyaska.jpg" alt="Остров Баффинова Земля. Канада" class="element__image">
                 <div class="element__title-flex">
                     <p class="element__title">о. Баффинова Земля</p>
-                    <button class="button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
-                            class="button-like__image"></button>
+                    <button class="element__button-like" name="like" type="button"><img src="./images/button-like.svg" alt="Лайк"
+                            class="element__button-like-img"></button>
                 </div>
             </div>
         </section>
@@ -94,23 +94,21 @@
         <p class="footer__copyright">&#169; 2022 Mesto Russia</p>
     </footer>
 
-    <div class="popup__backdrop"> <!--Add here popup_opened-->
-        <div class="popup">
+    <div class="popup"> <!--Add here popup_opened-->
+        <div class="popup__container">
             <button class="popup__button-close" name="close" type="button">
                 <img src="./images/close_mobile.svg" alt="Закрыть">
             </button>
-            <div class="popup__container">
-                <h2 class="popup__heading">Редактировать профиль</h2>
-                <form class="popup__form">
-                    <fieldset class="popup__fieldset">
-                        <input class="popup__field" placeholder="Имя" type="text" name="name" value="Рагнар Аксельссон"
-                            aria-label="name">
-                        <input class="popup__field" placeholder="О себе" type="text" name="status"
-                            value="Исландский фотограф" aria-label="status">
-                    </fieldset>
-                    <button class="popup__button-submit" name="submit" type="submit">Сохранить</button>
-                </form>
-            </div>
+            <h2 class="popup__heading">Редактировать профиль</h2>
+            <form class="popup__form" name="form">
+                <fieldset class="popup__fieldset">
+                    <input class="popup__field" placeholder="Имя" type="text" name="name" value="Рагнар Аксельссон"
+                        aria-label="name">
+                    <input class="popup__field" placeholder="О себе" type="text" name="status"
+                        value="Исландский фотограф" aria-label="status">
+                </fieldset>
+                <button class="popup__button-submit" name="submit" type="submit">Сохранить</button>
+            </form>
         </div>
     </div>
 

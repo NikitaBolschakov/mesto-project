@@ -1,4 +1,4 @@
-.button-add {
+.profile__button-add {
     display: block;
     background-color: black;
     border: white solid 2px;
@@ -10,17 +10,18 @@
     margin: 0 auto;
     cursor: pointer;
 }
-
+    
 @media (min-width: 1024px) {
-    .button-add {
+    .profile__button-add {
         width: 150px;
         margin: 0;
         margin-left: auto;
         align-self: center;
     }
 }
-
-.button-add:hover {
+    
+.profile__button-add:hover {
     opacity: .6;
     transition: 200ms;
 }
+

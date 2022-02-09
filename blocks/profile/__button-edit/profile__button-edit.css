@@ -1,4 +1,4 @@
-.button-edit {
+.profile__button-edit {
     background-color: black;
     border: none;
     padding: 0;
@@ -7,12 +7,12 @@
 }
 
 @media (min-width: 1024px) {
-    .button-edit {
+    .profile__button-edit {
         margin-left: 18px;
     }
 }
 
-.button-edit:hover {
+.profile__button-edit:hover {
     opacity: .6;
     transition: 200ms;
 }

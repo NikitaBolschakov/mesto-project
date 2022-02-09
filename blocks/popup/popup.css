@@ -1,6 +1,10 @@
 .popup {
     position: fixed;
-    top: 123px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;    
+    background-color: rgba(0, 0, 0, .5);
 }
