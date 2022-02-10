@@ -9,12 +9,13 @@
     width: 238px;
     height: 46px;
     padding: 0;
-    margin: auto;
+    margin: 0 auto 26px;
     cursor: pointer;
 }
 
 @media (min-width: 1024px) {
     .popup__button-submit {
+        margin: 0 auto 37px;
         font-size: 18px;
         line-height: 22px;
         width: 358px;

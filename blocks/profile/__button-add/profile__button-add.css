@@ -1,6 +1,6 @@
 .profile__button-add {
     display: block;
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0);
     border: white solid 2px;
     box-sizing: border-box;
     border-radius: 2px;
@@ -9,6 +9,10 @@
     height: 50px;
     margin: 0 auto;
     cursor: pointer;
+    background-image: url(../../../images/button-add.svg);
+    background-size: 16px;
+    background-position: center;
+    background-repeat: no-repeat;
 }
     
 @media (min-width: 1024px) {
@@ -17,6 +21,7 @@
         margin: 0;
         margin-left: auto;
         align-self: center;
+        background-size: 22px;
     }
 }
     

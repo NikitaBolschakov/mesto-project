@@ -1,11 +1,14 @@
 .element__button-like {
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0);
     border: none;
     padding: 0;
     margin-right: 20px;
     align-self: center;
     height: min-content;
     cursor: pointer;
+    width: 22px;
+    height: 19px;
+    background-image: url(../../../images/button-like.svg);
 }
 
 .element__button-like:hover {
