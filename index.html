@@ -23,7 +23,8 @@
             <div class="profile__info">
                 <div class="profile__title">
                     <h1 class="profile__name">Рагнар Аксельссон</h1>
-                    <button class="profile__button-edit" name="user_name" type="button" aria-label="Редактировать профиль"></button>
+                    <button class="profile__button-edit" name="user_name" type="button"
+                        aria-label="Редактировать профиль"></button>
                 </div>
                 <p class="profile__status">Исландский фотограф</p>
             </div>
@@ -31,68 +32,84 @@
         </section>
 
         <section class="gallery">
-            <div class="element">
-                <img src="./images/Greenland.jpg" alt="Гренландия" class="element__image">
-                <div class="element__title-flex">
-                    <h2 class="element__title">Гренландия</h2>
-                    <button class="element__button-like" name="like" type="button" aria-label="Поставить лайк"></button>
-                </div>
-            </div>
 
-            <div class="element">
-                <img src="./images/portret.jpg" alt="Фарерские острова" class="element__image">
-                <div class="element__title-flex">
-                    <h2 class="element__title">Фарерские острова</h2>
-                    <button class="element__button-like" name="like" type="button"></button>
+            <template id="card">
+                <div class="element">
+                    <img src="./images/Greenland.jpg" alt="Гренландия" class="element__image">
+                    <div class="element__title-flex">
+                        <h2 class="element__title">Гренландия</h2>
+                        <button class="element__button-like" name="like" type="button"
+                            aria-label="Поставить лайк"></button>
+                    </div>
                 </div>
-            </div>
+            </template>
 
-            <div class="element">
-                <img src="./images/yakut.jpg" alt="Якутия" class="element__image">
-                <div class="element__title-flex">
-                    <h2 class="element__title">Якутия</h2>
-                    <button class="element__button-like" name="like" type="button"></button>
+            <!--<template>
+                <div class="element">
+                    <img src="./images/portret.jpg" alt="Фарерские острова" class="element__image">
+                    <div class="element__title-flex">
+                        <h2 class="element__title">Фарерские острова</h2>
+                        <button class="element__button-like" name="like" type="button"></button>
+                    </div>
                 </div>
-            </div>
+            </template>
 
-            <div class="element">
-                <img src="./images/island.jpg" alt="Исландия" class="element__image">
-                <div class="element__title-flex">
-                    <h2 class="element__title">Исландия</h2>
-                    <button class="element__button-like" name="like" type="button"></button>
+            <template>
+                <div class="element">
+                    <img src="./images/yakut.jpg" alt="Якутия" class="element__image">
+                    <div class="element__title-flex">
+                        <h2 class="element__title">Якутия</h2>
+                        <button class="element__button-like" name="like" type="button"></button>
+                    </div>
                 </div>
-            </div>
+            </template>
 
-            <div class="element">
-                <img src="./images/siberia.jpg" alt="Сибирь" class="element__image">
-                <div class="element__title-flex">
-                    <h2 class="element__title">Сибирь</h2>
-                    <button class="element__button-like" name="like" type="button"></button>
+            <template>
+                <div class="element">
+                    <img src="./images/island.jpg" alt="Исландия" class="element__image">
+                    <div class="element__title-flex">
+                        <h2 class="element__title">Исландия</h2>
+                        <button class="element__button-like" name="like" type="button"></button>
+                    </div>
                 </div>
-            </div>
+            </template>
 
-            <div class="element">
-                <img src="./images/alyaska.jpg" alt="Остров Баффинова Земля. Канада" class="element__image">
-                <div class="element__title-flex">
-                    <h2 class="element__title">о. Баффинова Земля</h2>
-                    <button class="element__button-like" name="like" type="button"></button>
+            <template>
+                <div class="element">
+                    <img src="./images/siberia.jpg" alt="Сибирь" class="element__image">
+                    <div class="element__title-flex">
+                        <h2 class="element__title">Сибирь</h2>
+                        <button class="element__button-like" name="like" type="button"></button>
+                    </div>
                 </div>
-            </div>
+            </template>
+
+            <template>
+                <div class="element">
+                    <img src="./images/alyaska.jpg" alt="Остров Баффинова Земля. Канада" class="element__image">
+                    <div class="element__title-flex">
+                        <h2 class="element__title">о. Баффинова Земля</h2>
+                        <button class="element__button-like" name="like" type="button"></button>
+                    </div>
+                </div>
+            </template>-->
+
         </section>
     </main>
 
     <footer class="footer">
         <p class="footer__copyright">&#169; 2022 Mesto Russia</p>
     </footer>
-<!--Редактирование профиля-->
+    <!--Редактирование профиля-->
     <div class="popup" id="popup-edit">
         <div class="popup__container">
-            <button class="popup__button-close" id="close-popup-edit" name="close" type="button" aria-label="Закрыть"></button>
+            <button class="popup__button-close" id="close-popup-edit" name="close" type="button"
+                aria-label="Закрыть"></button>
             <h2 class="popup__heading">Редактировать профиль</h2>
-            <form class="popup__form" name="form">
+            <form class="popup__form" id="popup-form-edit" name="form">
                 <fieldset class="popup__fieldset">
-                    <input class="popup__field" id="field-name" placeholder="Имя" type="text" name="name" value="Рагнар Аксельссон"
-                        aria-label="name">
+                    <input class="popup__field" id="field-name" placeholder="Имя" type="text" name="name"
+                        value="Рагнар Аксельссон" aria-label="name">
                     <input class="popup__field" id="field-job" placeholder="О себе" type="text" name="status"
                         value="Исландский фотограф" aria-label="status">
                 </fieldset>
@@ -100,17 +117,18 @@
             </form>
         </div>
     </div>
- <!--Добавление карточки-->
+    <!--Добавление карточки-->
     <div class="popup" id="popup-add">
         <div class="popup__container">
-            <button class="popup__button-close" id="close-popup-add" name="close" type="button" aria-label="Закрыть"></button>
+            <button class="popup__button-close" id="close-popup-add" name="close" type="button"
+                aria-label="Закрыть"></button>
             <h2 class="popup__heading">Новое место</h2>
-            <form class="popup__form" name="form">
+            <form class="popup__form" id="popup-form-add" name="form">
                 <fieldset class="popup__fieldset">
-                    <input class="popup__field" id="field-name-image" placeholder="Название" type="text" name="name-image" value=""
-                        aria-label="Название карточки">
-                    <input class="popup__field" id="field-link-image" placeholder="Ссылка на картинку" type="text" name="link-image"
-                        value="" aria-label="Ссылка на картинку">
+                    <input class="popup__field" id="field-name-image" placeholder="Название" type="text"
+                        name="name-image" value="" aria-label="Название карточки">
+                    <input class="popup__field" id="field-link-image" placeholder="Ссылка на картинку" type="text"
+                        name="link-image" value="" aria-label="Ссылка на картинку">
                 </fieldset>
                 <button class="popup__button-submit" name="submit" type="submit">Создать</button>
             </form>

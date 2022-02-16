@@ -28,28 +28,28 @@ closeButtonPopupAdd.addEventListener('click', openClosePopupAdd);
 
 
 
-/*Редактирование профиля из попапа*/
-const formElement = document.querySelector('.popup__form');
+//Редактирование профиля из попапа
+const formElement = document.querySelector('#popup-form-edit');
 const nameInput = document.querySelector('#field-name');
 const jobInput = document.querySelector('#field-job');
 
-/*Функция изменения данных пользователя*/
+//Функция изменения данных пользователя
 function formSubmitHandler(evt) {               
     evt.preventDefault();
                        
-    /*Нашёл значения полей*/
+    //Нашёл значения полей
     let nameValue = nameInput.value;    
     let jobValue = jobInput.value;
     
-    /*Нашел элементы куда буду вставлять значения полей*/
+    //Нашел элементы куда буду вставлять значения полей
     const nameElement = document.querySelector('.profile__name');
     const jobElement = document.querySelector('.profile__status');
 
-    /*Вставил новые значения*/
+    //Вставил новые значения
     nameElement.textContent = nameValue;
     jobElement.textContent = jobValue;
 
-    /*Вместо отправки на сервер, просто закрываю форму*/
+    //Вместо отправки на сервер, просто закрываю форму
     openClosePopupEdit();
 }
 
@@ -61,7 +61,45 @@ formElement.addEventListener('submit', formSubmitHandler);
 
 
 
-//Шесть карточек из коробки
+//Добавление карточек
+const formCardElement = document.querySelector('#popup-form-add');              
+const cardContainer = document.querySelector('.gallery'); 
+
+//Функция создания карточки 
+function newCard(titleValue, linkValue) {                                         
+  const cardTemplate = document.querySelector('#card').content;
+  const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
+
+  cardElement.querySelector('.element__title').textContent = titleValue;
+  cardElement.querySelector('.element__image').src = linkValue;
+  cardElement.querySelector('.element__button-like').addEventListener('click', function (evt) {
+    evt.target.classList.toggle('element__button-like_active');
+});
+
+  cardContainer.prepend(cardElement);
+}
+
+//Обработчик отправки формы
+formCardElement.addEventListener('submit', function(evt) {                      
+  evt.preventDefault();
+
+  const titleCard = document.querySelector('#field-name-image');
+  const linkCard = document.querySelector('#field-link-image');
+
+  //значение полей ввода как аргументы функции
+  newCard(titleCard.value, linkCard.value);
+
+  //чистые поля ввода после добавления карточки 
+  titleCard.value = '';                                                         
+  linkCard.value = '';
+
+  openClosePopupAdd();
+});
+
+
+
+
+/*//Шесть карточек из коробки
 const initialCards = [
     {
       name: 'Архыз',
@@ -87,19 +125,4 @@ const initialCards = [
       name: 'Байкал',
       link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
     }
-    ];
-
-
-
-
-//Лайк
-const buttonLike = document.querySelector('.element__button-like');
-
-buttonLike.addEventListener('click', function (evt) {
-  // в переменной eventTarget окажется элемент
-  // button, на который мы кликнули
-
-    const eventTarget = evt.target;
-    eventTarget.setAttribute('style', 'background-image: url(../../../images/button-like-active.svg)');
-}); 
-//попробовать когда карточки будут через тemplate
+    ];*/
