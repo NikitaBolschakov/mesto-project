@@ -84,24 +84,39 @@
     <footer class="footer">
         <p class="footer__copyright">&#169; 2022 Mesto Russia</p>
     </footer>
-
-    <div class="popup">
-        <!--Add here popup_opened-->
+<!--Редактирование профиля-->
+    <div class="popup" id="popup-edit">
         <div class="popup__container">
-            <button class="popup__button-close" name="close" type="button" aria-label="Закрыть"></button>
+            <button class="popup__button-close" id="close-popup-edit" name="close" type="button" aria-label="Закрыть"></button>
             <h2 class="popup__heading">Редактировать профиль</h2>
             <form class="popup__form" name="form">
                 <fieldset class="popup__fieldset">
-                    <input class="popup__field" placeholder="Имя" type="text" name="name" value="Рагнар Аксельссон"
+                    <input class="popup__field" id="field-name" placeholder="Имя" type="text" name="name" value="Рагнар Аксельссон"
                         aria-label="name">
-                    <input class="popup__field" placeholder="О себе" type="text" name="status"
+                    <input class="popup__field" id="field-job" placeholder="О себе" type="text" name="status"
                         value="Исландский фотограф" aria-label="status">
                 </fieldset>
                 <button class="popup__button-submit" name="submit" type="submit">Сохранить</button>
             </form>
         </div>
     </div>
-
+ <!--Добавление карточки-->
+    <div class="popup" id="popup-add">
+        <div class="popup__container">
+            <button class="popup__button-close" id="close-popup-add" name="close" type="button" aria-label="Закрыть"></button>
+            <h2 class="popup__heading">Новое место</h2>
+            <form class="popup__form" name="form">
+                <fieldset class="popup__fieldset">
+                    <input class="popup__field" id="field-name-image" placeholder="Название" type="text" name="name-image" value=""
+                        aria-label="Название карточки">
+                    <input class="popup__field" id="field-link-image" placeholder="Ссылка на картинку" type="text" name="link-image"
+                        value="" aria-label="Ссылка на картинку">
+                </fieldset>
+                <button class="popup__button-submit" name="submit" type="submit">Создать</button>
+            </form>
+        </div>
+    </div>
+    <script src="./script.js"></script>
 </body>
 
 </html>
