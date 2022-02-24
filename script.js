@@ -4,11 +4,13 @@ const closeButtonPopupEdit = document.querySelector('#close-popup-edit');
 const popupEdit = document.querySelector('#popup-edit');
 
 function openClosePopupEdit() {
-    popupEdit.classList.toggle('popup_opened');
+  popupEdit.classList.toggle('popup_opened');
 }
 
 editButton.addEventListener('click', openClosePopupEdit);
 closeButtonPopupEdit.addEventListener('click', openClosePopupEdit);
+
+//closeButtonPopupEdit.addEventListener('click', function() {}
 
 
 
@@ -19,11 +21,33 @@ const closeButtonPopupAdd = document.querySelector('#close-popup-add');
 const popupAdd = document.querySelector('#popup-add');
 
 function openClosePopupAdd() {
-    popupAdd.classList.toggle('popup_opened');
+  popupAdd.classList.toggle('popup_opened');
 }
 
 addButton.addEventListener('click', openClosePopupAdd);
 closeButtonPopupAdd.addEventListener('click', openClosePopupAdd);
+
+
+
+
+//Открыть-закрыть pop-up "Увеличить картинку"
+const cardTemplate = document.querySelector('#card').content;
+const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
+
+const closeButtonPopupImage = document.querySelector('#close-popup-image');
+const popupImage = document.querySelector('#popup-image');
+
+function openClosePopupImage() {
+  popupImage.classList.toggle('popup_opened');
+}
+
+cardElement.querySelector('.element__image').addEventListener('click', openClosePopupImage);
+closeButtonPopupImage.addEventListener('click', openClosePopupImage);
+
+
+
+
+
 
 
 
@@ -61,23 +85,138 @@ formElement.addEventListener('submit', formSubmitHandler);
 
 
 
+
+
+
+
+
+
+//Массив карточек из коробки
+const initialCards = [
+  {
+    name: 'Баффинова земля',
+    link: 'https://i.pinimg.com/originals/b8/92/02/b892024460f7bac7f7e1ad8bd791cfb5.jpg'
+  },
+  {
+    name: 'Сибирь',
+    link: 'https://pbs.twimg.com/media/ELq3CntXYAU1ImZ.jpg'
+  },
+  {
+    name: 'Якутия',
+    link: 'https://media.newyorker.com/photos/61c4b326e75264a7841ec846/master/pass/Taub-Ragnar-18.jpg'
+  },
+  {
+    name: 'Фарерские острова',
+    link: 'https://novation-nn.ru/wp-content/uploads/2018/03/vystavka-islandskogo-fotografa-ragnara-akselssona.jpg'
+  },
+  {
+    name: 'Исландия',
+    link: 'https://img-fotki.yandex.ru/get/6408/20682809.284/0_90f5d_5719da04_XL.jpg'
+  },
+  {
+    name: 'Гренландия',
+    link: 'https://publicdelivery.org/wp-content/uploads/2019/09/Ragnar-Axelsson-Last-Days-of-the-Arctic-Comet-Hale-Bop-in-the-sky-with-dancing-northern-lights-in-the-village-of-Tinniteqilaaq-on-the-east-coast-of-Greenland-.jpg'
+  }
+  ];
+
+
+
+
+
+
+
+
+
+
 //Добавление карточек
 const formCardElement = document.querySelector('#popup-form-add');              
 const cardContainer = document.querySelector('.gallery'); 
 
-//Функция создания карточки 
-function newCard(titleValue, linkValue) {                                         
+//Цикл обработки массива карточек из коробки
+initialCards.forEach(function (card) {
   const cardTemplate = document.querySelector('#card').content;
   const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
 
-  cardElement.querySelector('.element__title').textContent = titleValue;
-  cardElement.querySelector('.element__image').src = linkValue;
+  cardElement.querySelector('.element__title').textContent = card.name;
+  cardElement.querySelector('.element__image').src = card.link;
+  cardElement.querySelector('.element__image').alt = card.name;
+
+  //открытие попапа с изображением
+  cardElement.querySelector('.element__image').addEventListener('click', function () {
+    popupImage.querySelector('.popup__image').setAttribute('src', card.link);
+    popupImage.querySelector('.popup__image').setAttribute('alt', card.name);
+    popupImage.querySelector('.popup__caption').textContent = card.name;
+    
+    openClosePopupImage();
+  });
+
+  //лайк
   cardElement.querySelector('.element__button-like').addEventListener('click', function (evt) {
     evt.target.classList.toggle('element__button-like_active');
+  });
+  
+  //удаление
+  const deleteButton = cardElement.querySelector('.element__button-delete');  
+  deleteButton.addEventListener('click', function() {
+    cardElement.remove();
+  });
+
+  //добавление в DOM
+  cardContainer.prepend(cardElement);
 });
 
+
+
+
+
+
+
+
+
+
+//Функция создания/удаления/лайка карточки 
+function newCard(name, link) {                                         
+  const cardTemplate = document.querySelector('#card').content;
+  const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
+
+  //контент и свойства карточки
+  cardElement.querySelector('.element__title').textContent = name;
+  cardElement.querySelector('.element__image').src = link;
+  cardElement.querySelector('.element__image').alt = name;
+
+  //открытие попапа с изображением
+  cardElement.querySelector('.element__image').addEventListener('click', function () {
+    popupImage.querySelector('.popup__image').setAttribute('src', link);
+    popupImage.querySelector('.popup__image').setAttribute('alt', name);
+    popupImage.querySelector('.popup__caption').textContent = name;
+    
+    openClosePopupImage();
+  });
+
+  //лайк
+  cardElement.querySelector('.element__button-like').addEventListener('click', function (evt) {
+    evt.target.classList.toggle('element__button-like_active');
+  });
+  
+  //удаление
+  const deleteButton = cardElement.querySelector('.element__button-delete');  
+  deleteButton.addEventListener('click', function () {
+    cardElement.remove();
+  });
+
+  //добавление в начало DOM
   cardContainer.prepend(cardElement);
 }
+
+
+
+
+
+
+
+
+
+
 
 //Обработчик отправки формы
 formCardElement.addEventListener('submit', function(evt) {                      
@@ -96,33 +235,3 @@ formCardElement.addEventListener('submit', function(evt) {
   openClosePopupAdd();
 });
 
-
-
-
-/*//Шесть карточек из коробки
-const initialCards = [
-    {
-      name: 'Архыз',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-    },
-    {
-      name: 'Челябинская область',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-    },
-    {
-      name: 'Иваново',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-    },
-    {
-      name: 'Камчатка',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-    },
-    {
-      name: 'Холмогорский район',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-    },
-    {
-      name: 'Байкал',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-    }
-    ];*/

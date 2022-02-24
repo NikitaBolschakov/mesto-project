@@ -35,7 +35,9 @@
 
             <template id="card">
                 <div class="element">
-                    <img src="./images/Greenland.jpg" alt="Гренландия" class="element__image">
+                    <button class="element__button-delete" name="delete" type="button"
+                    aria-label="Удалить карточку"></button>
+                    <img src="" alt="." class="element__image">
                     <div class="element__title-flex">
                         <h2 class="element__title">Гренландия</h2>
                         <button class="element__button-like" name="like" type="button"
@@ -93,16 +95,12 @@
                     </div>
                 </div>
             </template>-->
-
         </section>
     </main>
 
-    <footer class="footer">
-        <p class="footer__copyright">&#169; 2022 Mesto Russia</p>
-    </footer>
     <!--Редактирование профиля-->
     <div class="popup" id="popup-edit">
-        <div class="popup__container">
+        <div class="popup__container popup__container_type_form">
             <button class="popup__button-close" id="close-popup-edit" name="close" type="button"
                 aria-label="Закрыть"></button>
             <h2 class="popup__heading">Редактировать профиль</h2>
@@ -119,7 +117,7 @@
     </div>
     <!--Добавление карточки-->
     <div class="popup" id="popup-add">
-        <div class="popup__container">
+        <div class="popup__container popup__container_type_form">
             <button class="popup__button-close" id="close-popup-add" name="close" type="button"
                 aria-label="Закрыть"></button>
             <h2 class="popup__heading">Новое место</h2>
@@ -134,6 +132,20 @@
             </form>
         </div>
     </div>
+    <!--Попап нажатия на картинку-->
+    <div class="popup" id="popup-image">
+        <div class="popup__container popup__container_type_image">
+            <button class="popup__button-close" id="close-popup-image" name="close" type="button"
+                aria-label="Закрыть"></button>   
+            <img src="" alt="" class="popup__image">   
+            <h2 class="popup__caption"></h2>  
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p class="footer__copyright">&#169; 2022 Mesto Russia</p>
+    </footer>
+    
     <script src="./script.js"></script>
 </body>
 
