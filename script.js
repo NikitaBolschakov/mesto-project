@@ -10,8 +10,6 @@ function openClosePopupEdit() {
 editButton.addEventListener('click', openClosePopupEdit);
 closeButtonPopupEdit.addEventListener('click', openClosePopupEdit);
 
-//closeButtonPopupEdit.addEventListener('click', function() {}
-
 
 
 
@@ -43,11 +41,6 @@ function openClosePopupImage() {
 
 cardElement.querySelector('.element__image').addEventListener('click', openClosePopupImage);
 closeButtonPopupImage.addEventListener('click', openClosePopupImage);
-
-
-
-
-
 
 
 
@@ -85,12 +78,6 @@ formElement.addEventListener('submit', formSubmitHandler);
 
 
 
-
-
-
-
-
-
 //Массив карточек из коробки
 const initialCards = [
   {
@@ -118,12 +105,6 @@ const initialCards = [
     link: 'https://publicdelivery.org/wp-content/uploads/2019/09/Ragnar-Axelsson-Last-Days-of-the-Arctic-Comet-Hale-Bop-in-the-sky-with-dancing-northern-lights-in-the-village-of-Tinniteqilaaq-on-the-east-coast-of-Greenland-.jpg'
   }
   ];
-
-
-
-
-
-
 
 
 
@@ -168,12 +149,6 @@ initialCards.forEach(function (card) {
 
 
 
-
-
-
-
-
-
 //Функция создания/удаления/лайка карточки 
 function newCard(name, link) {                                         
   const cardTemplate = document.querySelector('#card').content;
@@ -207,13 +182,6 @@ function newCard(name, link) {
   //добавление в начало DOM
   cardContainer.prepend(cardElement);
 }
-
-
-
-
-
-
-
 
 
 
