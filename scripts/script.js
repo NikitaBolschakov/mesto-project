@@ -157,27 +157,9 @@ initialCards.forEach(card => {
 
 
 //Функция создания новой карточки 
-function prependCard(name, link) {   
+function prependCard(name, link) {  
+  const card = {name, link} 
   const cardElement = createCard(card);
-
-  const titleCardElement = cardElement.querySelector('.element__title');
-  const imageCardElement = cardElement.querySelector('.element__image');
-  
-  //контент и свойства новой карточки
-  titleCardElement.textContent = name;
-  imageCardElement.src = link;
-  imageCardElement.alt = name;
-
-  //открытие попапа с изображением
-  imageCardElement.addEventListener('click', () => {
-    popupImagePicture.setAttribute('src', link);
-    popupImagePicture.setAttribute('alt', name);
-    popupImageCaption.textContent = name;
-    
-    openPopup(popupImage);
-  });
-
-  //добавление в начало DOM
   cardContainer.prepend(cardElement);
 }
 
@@ -189,9 +171,8 @@ formCardElement.addEventListener('submit', evt => {
   //значение полей ввода как аргументы функции 
   prependCard(titleCard.value, linkCard.value);
   
-  //чистые поля ввода после добавления карточки 
-  titleCard.value = '';                                                         
-  linkCard.value = '';
+  //чистая форма после добавления карточки 
+  evt.target.reset();
 
   closePopup(popupAdd);
 });
