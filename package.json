@@ -1,0 +1,19 @@
+{
+  "name": "mesto_project",
+  "version": "0.0.1",
+  "description": "* Идея\r * Figma\r * Технологии",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikitaBolschakov/mesto-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NikitaBolschakov/mesto-project/issues"
+  },
+  "homepage": "https://github.com/NikitaBolschakov/mesto-project#readme"
+}

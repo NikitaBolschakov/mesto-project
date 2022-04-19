@@ -1,4 +1,6 @@
 //Элементы DOM
+const page = document.querySelector('.page');
+const popupItems = document.querySelectorAll('.popup');
 const nameElement = document.querySelector('.profile__name');
 const jobElement = document.querySelector('.profile__status');
 const formCardElement = document.querySelector('#popup-form-add');              
@@ -24,6 +26,11 @@ const popupImagePicture = popupImage.querySelector('.popup__image');
 const popupImageCaption = popupImage.querySelector('.popup__caption');
 //Шаблон карточки
 const cardTemplate = document.querySelector('#card').content;
+//Попап обновить аватар
+const popupUpdate = document.querySelector('#popup-update');
+const closeButtonPopupUpdate = document.querySelector('#close-popup-update');
+const updateInput = document.querySelector('#field-avatar');
+const updateButton = document.querySelector('.profile__avatar');
 
 
 //Функции открытия и закрытия pop-up
@@ -63,6 +70,18 @@ closeButtonPopupImage.addEventListener('click', () => {
 });
 
 
+//Открыть pop-up "Обновить аватар"
+updateButton.addEventListener('click', () => {
+  openPopup(popupUpdate);
+});
+
+//Закрыть pop-up "Обновить аватар"
+closeButtonPopupUpdate.addEventListener('click', () => {
+  closePopup(popupUpdate);
+});
+
+
+
 //Функция изменения данных пользователя
 function handleProfileFormSubmit(evt) {               
     evt.preventDefault();
@@ -79,6 +98,7 @@ function handleProfileFormSubmit(evt) {
     closePopup(popupEdit);
 }
 
+//Обработчик отправки формы с именем
 /*Кнопка "отправить""-->
 выполняется функция handleProfileFormSubmit, 
 внутри нее срабатывает ф-ция openClosePopupEdit*/
@@ -164,7 +184,7 @@ function prependCard(name, link) {
 }
 
 
-//Обработчик отправки формы
+//Обработчик отправки формы с карточкой
 formCardElement.addEventListener('submit', evt => {                      
   evt.preventDefault();
 
@@ -176,3 +196,21 @@ formCardElement.addEventListener('submit', evt => {
 
   closePopup(popupAdd);
 });
+
+
+//Прохожу по каждому попапу методом forEach, на каждый ставлю слушатель события, если он есть,
+//закрываю именно этот попап. Колбек в колбеке в цикле. 
+
+//закрытие попапа нажатием 'Escape'
+popupItems.forEach(popupItem => page.addEventListener('keydown', evt => {
+  if(evt.key === 'Escape') {
+    closePopup(popupItem);
+  }
+}))
+
+//закрытие кликом на оверлей
+popupItems.forEach(popupItem => popupItem.addEventListener('click', evt => {
+  if (evt.target === popupItem) {
+    closePopup(popupItem);
+  }
+}))

@@ -1,0 +1,12 @@
+.profile__ovl {
+    width: 120px;
+    height: 120px;
+}
+
+.profile__ovl:hover {
+    background-image: url(../../../images/pen_for_edit_avatar.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+

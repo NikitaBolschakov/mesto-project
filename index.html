@@ -19,7 +19,9 @@
 
     <main class="content">
         <section class="profile">
-            <img class="profile__avatar" src="./images/ragnar.jpg" alt="Аватар пользователя">
+            <div class="profile__avatar">
+                <div class="profile__ovl"></div>
+            </div>
             <div class="profile__info">
                 <div class="profile__title">
                     <h1 class="profile__name">Рагнар Аксельссон</h1>
@@ -35,7 +37,7 @@
             <template id="card">
                 <div class="element">
                     <button class="element__button-delete" name="delete" type="button"
-                    aria-label="Удалить карточку"></button>
+                        aria-label="Удалить карточку"></button>
                     <img src="" alt="." class="element__image">
                     <div class="element__title-flex">
                         <h2 class="element__title">Гренландия</h2>
@@ -53,7 +55,7 @@
             <button class="popup__button-close" id="close-popup-edit" name="close" type="button"
                 aria-label="Закрыть"></button>
             <h2 class="popup__heading">Редактировать профиль</h2>
-            <form class="popup__form" id="popup-form-edit" name="form">
+            <form class="popup__form" id="popup-form-edit" name="profile">
                 <fieldset class="popup__fieldset">
                     <input class="popup__field" id="field-name" placeholder="Имя" type="text" name="name"
                         value="Рагнар Аксельссон" aria-label="name">
@@ -70,7 +72,7 @@
             <button class="popup__button-close" id="close-popup-add" name="close" type="button"
                 aria-label="Закрыть"></button>
             <h2 class="popup__heading">Новое место</h2>
-            <form class="popup__form" id="popup-form-add" name="form">
+            <form class="popup__form" id="popup-form-add" name="form-add">
                 <fieldset class="popup__fieldset">
                     <input class="popup__field" id="field-name-image" placeholder="Название" type="text"
                         name="name-image" value="" aria-label="Название карточки">
@@ -85,16 +87,31 @@
     <div class="popup" id="popup-image">
         <div class="popup__container popup__container_type_image">
             <button class="popup__button-close" id="close-popup-image" name="close" type="button"
-                aria-label="Закрыть"></button>   
-            <img src="" alt="" class="popup__image">   
-            <h2 class="popup__caption"></h2>  
+                aria-label="Закрыть"></button>
+            <img src="" alt="" class="popup__image">
+            <h2 class="popup__caption"></h2>
         </div>
     </div>
-    
+    <!--Попап обновить аватар-->
+    <div class="popup" id="popup-update">
+        <div class="popup__container popup__container_type_form">
+            <button class="popup__button-close" id="close-popup-update" name="close" type="button"
+                aria-label="Закрыть"></button>
+            <h2 class="popup__heading">Обновить аватар</h2>
+            <form class="popup__form" id="popup-form-update" name="form-update">
+                <fieldset class="popup__fieldset">
+                    <input class="popup__field popup__field_type_alone" id="field-avatar" placeholder="Ссылка на новый аватар" type="text" name="avatar"
+                        value="" aria-label="avatar">
+                </fieldset>
+                <button class="popup__button-submit" name="submit" type="submit">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
     <footer class="footer">
         <p class="footer__copyright">&#169; 2022 Mesto Russia</p>
     </footer>
-    
+
     <script src="./scripts/script.js"></script>
 </body>
 
