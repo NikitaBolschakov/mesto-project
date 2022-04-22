@@ -9,7 +9,7 @@
     height: 50px;
     margin: 0 auto;
     cursor: pointer;
-    background-image: url(../../../images/button-add.svg);
+    background-image: url(../../../src/images/button-add.svg);
     background-size: 16px;
     background-position: center;
     background-repeat: no-repeat;

@@ -7,7 +7,7 @@
     cursor: pointer;
     width: 20px;
     height: 20px;
-    background-image: url(../../../images/close_mobile.svg);
+    background-image: url(../../../src/images/close_mobile.svg);
 }
 
 @media (min-width: 1024px) {
