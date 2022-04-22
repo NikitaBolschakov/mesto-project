@@ -8,7 +8,7 @@
     cursor: pointer;
     width: 22px;
     height: 19px;
-    background-image: url(../../../src/images/button-like.svg);
+    background-image: url(../../../images/button-like.svg);
 }
 
 .element__button-like:hover {

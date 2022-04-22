@@ -1,3 +1,5 @@
+import '../pages/index.css'
+
 const nameElement = document.querySelector('.profile__name');
 const jobElement = document.querySelector('.profile__status'); 
 const profileForm = document.querySelector('#popup-form-edit');
