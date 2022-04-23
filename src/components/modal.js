@@ -1,3 +1,6 @@
+import { selectors, showInputError, hideInputError, isValid, hasInvalidInput, 
+  toggleButtonState, enableValidation, lockButton } from './validate.js';
+
 const editButton = document.querySelector('.profile__button-edit');
 const closeButtonPopupEdit = document.querySelector('#close-popup-edit');
 const popupEdit = document.querySelector('#popup-edit');

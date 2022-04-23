@@ -25,12 +25,10 @@ const popupUpdate = document.querySelector('#popup-update');
 const closeButtonPopupUpdate = document.querySelector('#close-popup-update');
 const updateButton = document.querySelector('.profile__ovl');
 const popupImage = document.querySelector('#popup-image');
-//для утилс
-const page = document.querySelector('.page');
-const popupItems = document.querySelectorAll('.popup');
+const cardSaveButton = document.querySelector('#button-submit-add');
+
 
 export { nameElement, jobElement, profileForm, nameInput, jobInput, avatarForm, 
     cardTemplate, popupImagePicture, popupImageCaption, titleCard, linkCard, cardContainer, formCardElement,
     editButton, closeButtonPopupEdit, popupEdit, addButton, closeButtonPopupAdd, popupAdd, closeButtonPopupImage, 
-    popupUpdate, closeButtonPopupUpdate, updateButton, popupImage,
-    page, popupItems }
+    popupUpdate, closeButtonPopupUpdate, updateButton, popupImage, cardSaveButton }

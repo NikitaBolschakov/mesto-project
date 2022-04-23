@@ -1,22 +1,27 @@
 import '../pages/index.css'
 
+import { nameElement, jobElement, profileForm, nameInput, jobInput, avatarForm, 
+  cardTemplate, cardContainer, formCardElement, cardSaveButton } 
+  from './constants.js'
+
 import { editButton, closeButtonPopupEdit, popupEdit, addButton, closeButtonPopupAdd,
   popupAdd, closeButtonPopupImage, popupUpdate, closeButtonPopupUpdate, updateButton, 
   popupImage, openPopup, closePopup } from './modal.js'
 
-import { titleCard, linkCard, popupImagePicture, popupImageCaption, cardTemplate, 
-  initialCards, formCardElement, createCard } from './card.js'
+import { titleCard, linkCard, popupImagePicture, popupImageCaption,
+  initialCards, createCard } from './card.js'
 
-import { showInputError, hideInputError, isValid, hasInvalidInput, toggleButtonState, 
+import { selectors, showInputError, hideInputError, isValid, hasInvalidInput, toggleButtonState, 
   enableValidation } from './validate.js';
 
-const nameElement = document.querySelector('.profile__name');
+/*const nameElement = document.querySelector('.profile__name');
 const jobElement = document.querySelector('.profile__status'); 
 const profileForm = document.querySelector('#popup-form-edit');
 const nameInput = document.querySelector('#field-name');
 const jobInput = document.querySelector('#field-job');
 const avatarForm = document.querySelector('#popup-form-update'); 
 const cardContainer = document.querySelector('.gallery'); 
+const cardSaveButton = document.querySelector('#button-submit-add');*/
 
 //Обработчик массива карточек из коробки
 initialCards.forEach( card => {
@@ -40,12 +45,12 @@ formCardElement.addEventListener('submit', evt => {
   
   //чистая форма после добавления карточки 
   evt.target.reset();
+  //выключить кнопку
+  cardSaveButton.classList.add(selectors.inactiveButtonClass);
+  cardSaveButton.setAttribute('disabled', true);
 
   closePopup(popupAdd);
 });
-
-
-
 
 
 
@@ -58,6 +63,9 @@ editButton.addEventListener('click', () => {
 closeButtonPopupEdit.addEventListener('click', () => {
   closePopup(popupEdit);
 });
+
+
+ 
 
 //Открыть pop-up "Добавить карточку"
 addButton.addEventListener('click', () => {
@@ -122,9 +130,12 @@ const handleProfileFormSubmit = (evt) => {
 profileForm.addEventListener('submit', handleProfileFormSubmit);
 
 
-
-
-
-
 // Включить валидацию форм
-enableValidation(); 
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__field',
+  submitButtonSelector: '.popup__button-submit',
+  inactiveButtonClass: 'popup__button-submit_inactive',
+  inputErrorClass: 'popup__field_type_error',
+  errorClass: 'popup__field-error_active'
+}); 
