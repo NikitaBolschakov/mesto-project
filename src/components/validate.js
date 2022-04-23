@@ -91,7 +91,15 @@ const setEventListeners = (formElement) => {
 }; 
 
 //Функция, которая включает валидацию
-const enableValidation = () => {
+const enableValidation = (
+  /*objSettings = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__field',
+    submitButtonSelector: '.popup__button-submit',
+    inactiveButtonClass: 'popup__button-submit_inactive',
+    inputErrorClass: 'popup__field_type_error',
+    errorClass: 'popup__field-error_active'
+  }*/) => {
   // Найдём все формы с указанным классом в DOM,
   // сделаем из них массив методом Array.from
   const formList = Array.from(document.querySelectorAll('.popup__form'));

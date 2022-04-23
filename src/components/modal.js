@@ -10,44 +10,36 @@ const closeButtonPopupUpdate = document.querySelector('#close-popup-update');
 const updateButton = document.querySelector('.profile__ovl');
 const popupImage = document.querySelector('#popup-image');
 
-//Импорт утилитарных функций
-import { page, popupItems, openPopup, closePopup } from './utils.js'
 
-//Открыть pop-up "Редактирование профиля"
-editButton.addEventListener('click', () => {
-  openPopup(popupEdit);
-});
+const openPopup = (popup) => {
+  popup.classList.add('popup_opened');
+  document.addEventListener('keydown', handleClickOnEscape(popup));
+  document.addEventListener('click', handleClickOnOverlay(popup));
+}
 
-//Закрыть pop-up "Редактирование профиля"
-closeButtonPopupEdit.addEventListener('click', () => {
-  closePopup(popupEdit);
-});
+const closePopup = (popup) => {
+  popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', handleClickOnEscape(popup));
+  document.removeEventListener('click', handleClickOnOverlay(popup));
+}
 
-//Открыть pop-up "Добавить карточку"
-addButton.addEventListener('click', () => {
-  openPopup(popupAdd);
-});
+const handleClickOnEscape = (popup) => {
+  document.addEventListener('keydown', evt => {
+    if(evt.key === 'Escape') {
+      closePopup(popup);
+    }
+  })
+}
 
-//Закрыть pop-up "Добавить карточку"
-closeButtonPopupAdd.addEventListener('click', () => {
-  closePopup(popupAdd);
-});
+const handleClickOnOverlay = (popup) => {
+  document.addEventListener('click', evt => {
+    if (evt.target === popup) {
+      closePopup(popup);
+    }
+  })
+}
 
-//Открытие папапа есть в цикле обработчика массива
-//Закрыть попап с изображением
-closeButtonPopupImage.addEventListener('click', () => {
-  closePopup(popupImage);
-});
-
-//Открыть pop-up "Обновить аватар"
-updateButton.addEventListener('click', () => {
-  openPopup(popupUpdate);
-});
-
-//Закрыть pop-up "Обновить аватар"
-closeButtonPopupUpdate.addEventListener('click', () => {
-  closePopup(popupUpdate);
-});
 
 export { editButton, closeButtonPopupEdit, popupEdit, addButton, closeButtonPopupAdd,
-  popupAdd, closeButtonPopupImage, popupUpdate, closeButtonPopupUpdate, updateButton, popupImage, openPopup }
+  popupAdd, closeButtonPopupImage, popupUpdate, closeButtonPopupUpdate, updateButton, popupImage, 
+  openPopup, closePopup }

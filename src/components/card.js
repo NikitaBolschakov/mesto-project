@@ -1,13 +1,13 @@
+import { editButton, closeButtonPopupEdit, popupEdit, addButton, closeButtonPopupAdd,
+  popupAdd, closeButtonPopupImage, popupUpdate, closeButtonPopupUpdate, updateButton, 
+  popupImage, openPopup, closePopup } from './modal.js';
+
 const cardTemplate = document.querySelector('#card').content;
 const popupImagePicture = popupImage.querySelector('.popup__image');
 const popupImageCaption = popupImage.querySelector('.popup__caption');
 const titleCard = document.querySelector('#field-name-image');
 const linkCard = document.querySelector('#field-link-image');
-const cardContainer = document.querySelector('.gallery'); 
 const formCardElement = document.querySelector('#popup-form-add');  
-
-//Импорт утилитарных функций
-import { page, popupItems, openPopup, closePopup } from './utils.js'
 
 //Массив карточек из коробки
 const initialCards = [
@@ -36,12 +36,6 @@ const initialCards = [
     link: 'https://cameralabs.org/aeonmedia/zenfoto/4680/27058/za-gorami-fotograf-ragnar-akselsson-1_original.jpg'
   }
 ];
-
-//Импорт функциональности модальных окон
-import { editButton, closeButtonPopupEdit, popupEdit, addButton, closeButtonPopupAdd,
-    popupAdd, closeButtonPopupImage, popupUpdate, closeButtonPopupUpdate, updateButton, popupImage } 
-from './modal.js';
-
 
 //Функция создания карточки из цикла
 const createCard = (item) => {
@@ -77,31 +71,5 @@ const createCard = (item) => {
   return cardElement;
 }
 
-//Обработчик массива карточек из коробки
-initialCards.forEach( card => {
-  const cardElement = createCard(card);
-  cardContainer.prepend(cardElement);
-});
-
-//Функция создания новой карточки 
-const prependCard = (name, link) => {  
-  const card = {name, link} 
-  const cardElement = createCard(card);
-  cardContainer.prepend(cardElement);
-}
-
-//Обработчик отправки формы с карточкой
-formCardElement.addEventListener('submit', evt => {                      
-  evt.preventDefault();
-
-  //значение полей ввода как аргументы функции 
-  prependCard(titleCard.value, linkCard.value);
-  
-  //чистая форма после добавления карточки 
-  evt.target.reset();
-
-  closePopup(popupAdd);
-});
-
-export { cardContainer, titleCard, linkCard, popupImagePicture, popupImageCaption, cardTemplate, 
-    initialCards, formCardElement, createCard, prependCard };
+export { titleCard, linkCard, popupImagePicture, popupImageCaption, cardTemplate, 
+  initialCards, formCardElement, createCard };
