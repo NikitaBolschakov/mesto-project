@@ -82,12 +82,12 @@
                         name="link-image" value="" aria-label="Ссылка на картинку" required>
                     <span class="popup__field-error field-link-image-error">Введите адрес сайта.</span>
                 </fieldset>
-                <button class="popup__button-submit" name="submit" type="submit">Создать</button>
+                <button class="popup__button-submit" id="button-submit-add" name="submit" type="submit">Создать</button>
             </form>
         </div>
     </div>
     <!--Попап нажатия на картинку-->
-    <div class="popup" id="popup-image">
+    <div class="popup popup_type_image" id="popup-image">
         <div class="popup__container popup__container_type_image">
             <button class="popup__button-close" id="close-popup-image" name="close" type="button"
                 aria-label="Закрыть"></button>
@@ -108,7 +108,7 @@
                         required>
                     <span class="popup__field-error field-avatar-error"></span>
                 </fieldset>
-                <button class="popup__button-submit" name="submit" type="submit">Сохранить</button>
+                <button class="popup__button-submit" id="button-avatar-save" name="submit" type="submit">Сохранить</button>
             </form>
         </div>
     </div>
