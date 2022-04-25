@@ -24,6 +24,8 @@ const updateButton = document.querySelector(".profile__ovl");
 const popupImage = document.querySelector("#popup-image");
 const cardSaveButton = document.querySelector("#button-submit-add");
 const avatarSaveButton = document.querySelector('#button-avatar-save')
+const avatarInput = document.querySelector('#field-avatar');
+const avatarElement = document.querySelector('.profile__avatar');
 
 const selectors = {
   formSelector: ".popup__form",
@@ -61,5 +63,7 @@ export {
   popupImage,
   cardSaveButton,
   avatarSaveButton,
+  avatarInput,
+  avatarElement,
   selectors,
 };

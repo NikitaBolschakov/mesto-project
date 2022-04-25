@@ -22,6 +22,10 @@ import {
   closeButtonPopupUpdate,
   updateButton,
   popupImage,
+  cardSaveButton,
+  avatarSaveButton,
+  avatarInput,
+  avatarElement,
 } from "./constants.js";
 
 import { openPopup, closePopup } from "./modal.js";
@@ -29,8 +33,7 @@ import { openPopup, closePopup } from "./modal.js";
 import { initialCards, createCard } from "./card.js";
 
 import {
-  disableCardSaveButton,
-  disableAvatarSaveButton,
+  disableSaveButton,
   enableValidation,
 } from "./validate.js";
 
@@ -44,10 +47,8 @@ const prependCard = (name, link) => {
 //Функция создания аватара
 const createNewAvatar = () => {
   //нашел значение поля ввода - ссылку
-  const inputValue = document.querySelector('#field-avatar').value;
+  const inputValue = avatarInput.value;
   //элемент, на котором буду менять backgroundImage
-  const avatarElement = document.querySelector('.profile__avatar');
-  
   avatarElement.style.backgroundImage = `url(${inputValue})`;
 };
 
@@ -67,15 +68,11 @@ const handleProfileFormSubmit = (evt) => {
 //Обработчик отправки формы с карточкой
 formCardElement.addEventListener("submit", (evt) => {
   evt.preventDefault();
-
   //значение полей ввода как аргументы функции
   prependCard(titleCard.value, linkCard.value);
-
   //чистая форма после добавления карточки
   evt.target.reset();
-  //выключить кнопку
-  disableCardSaveButton();
-
+  disableSaveButton(cardSaveButton);
   closePopup(popupAdd);
 });
 
@@ -120,7 +117,7 @@ avatarForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
   createNewAvatar();
   evt.target.reset();
-  disableAvatarSaveButton();
+  disableSaveButton(avatarSaveButton);
   closePopup(popupUpdate);
 });
 

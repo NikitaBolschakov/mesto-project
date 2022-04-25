@@ -1,15 +1,9 @@
-import { cardSaveButton, avatarSaveButton, selectors } from "./constants.js";
+import { selectors } from "./constants.js";
 
-//Отключение кнопки "Создать" при добавлении карточки
-const disableCardSaveButton = () => {
-  cardSaveButton.classList.add(selectors.inactiveButtonClass);
-  cardSaveButton.setAttribute("disabled", true);
-};
-
-//Отключение кнопки "Сохранить" при изменении аватара
-const disableAvatarSaveButton = () => {
-  avatarSaveButton.classList.add(selectors.inactiveButtonClass);
-  avatarSaveButton.setAttribute("disabled", true);
+//Отключение кнопки Сохранить после отправки формы
+const disableSaveButton = (saveButton) => {
+  saveButton.classList.add(selectors.inactiveButtonClass);
+  saveButton.setAttribute("disabled", true);
 };
 
 // Функция, которая добавляет класс с ошибкой
@@ -134,8 +128,7 @@ const enableValidation = (selectors) => {
 };
 
 export {
-  disableCardSaveButton,
-  disableAvatarSaveButton,
+  disableSaveButton,
   showInputError,
   hideInputError,
   isValid,

@@ -1,29 +1,28 @@
 const openPopup = (popup) => {
   popup.classList.add("popup_opened");
-  document.addEventListener("keydown", handleClickOnEscape(popup));
-  document.addEventListener("click", handleClickOnOverlay(popup));
+  document.addEventListener("keydown", handleClickOnEscape);
+  document.addEventListener("click", handleClickOnOverlay);
 };
 
 const closePopup = (popup) => {
   popup.classList.remove("popup_opened");
-  document.removeEventListener("keydown", handleClickOnEscape(popup));
-  document.removeEventListener("click", handleClickOnOverlay(popup));
+  document.removeEventListener("keydown", handleClickOnEscape);
+  document.removeEventListener("click", handleClickOnOverlay);
 };
 
-const handleClickOnEscape = (popup) => {
-  document.addEventListener("keydown", (evt) => {
-    if (evt.key === "Escape") {
-      closePopup(popup);
-    }
-  });
+const handleClickOnEscape = (evt) => {
+  if (evt.key === "Escape") {
+    //нахожу открытый в данный момент попап
+    const popupOpened = document.querySelector('.popup_opened');
+    closePopup(popupOpened);
+  }
 };
 
-const handleClickOnOverlay = (popup) => {
-  document.addEventListener("click", (evt) => {
-    if (evt.target === popup) {
-      closePopup(popup);
-    }
-  });
+const handleClickOnOverlay = (evt) => {
+  const popupOpened = document.querySelector('.popup_opened');
+  if (evt.target === popupOpened) {
+    closePopup(popupOpened);
+  }
 };
 
 export { openPopup, closePopup };
