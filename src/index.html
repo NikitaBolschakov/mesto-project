@@ -23,11 +23,11 @@
             </div>
             <div class="profile__info">
                 <div class="profile__title">
-                    <h1 class="profile__name">Рагнар Аксельссон</h1>
+                    <h1 class="profile__name"></h1>
                     <button class="profile__button-edit" name="user_name" type="button"
                         aria-label="Редактировать профиль"></button>
                 </div>
-                <p class="profile__status">Исландский фотограф</p>
+                <p class="profile__status"></p>
             </div>
             <button class="profile__button-add" name="new_photo" type="button" aria-label="Добавить фото"></button>
         </section>
@@ -40,8 +40,11 @@
                     <img src="" alt="." class="element__image">
                     <div class="element__title-flex">
                         <h2 class="element__title">Гренландия</h2>
-                        <button class="element__button-like" name="like" type="button"
-                            aria-label="Поставить лайк"></button>
+                        <div class="element__like-box">
+                            <button class="element__button-like" name="like" type="button"
+                                aria-label="Поставить лайк"></button>
+                            <p class="element__counter">0</p>
+                        </div>
                     </div>
                 </div>
             </template>
@@ -57,10 +60,10 @@
             <form class="popup__form" id="popup-form-edit" name="profile" novalidate>
                 <fieldset class="popup__fieldset">
                     <input class="popup__field" id="field-name" placeholder="Имя" type="text" name="name"
-                        value="Рагнар Аксельссон" aria-label="name" minlength="2" maxlength="40" required>
+                        value="" aria-label="name" minlength="2" maxlength="40" required>
                     <span class="popup__field-error field-name-error">Вы пропустили это поле.</span>
                     <input class="popup__field" id="field-job" placeholder="О себе" type="text" name="status"
-                        value="Исландский фотограф" aria-label="status" minlength="2" maxlength="200" required>
+                        value="" aria-label="status" minlength="2" maxlength="200" required>
                     <span class="popup__field-error field-job-error">Вы пропустили это поле.</span>
                 </fieldset>
                 <button class="popup__button-submit" name="submit" type="submit">Сохранить</button>

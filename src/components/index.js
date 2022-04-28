@@ -30,17 +30,29 @@ import {
 
 import { openPopup, closePopup } from "./modal.js";
 
-import { initialCards, createCard } from "./card.js";
+import { createCard } from "./card.js";
+
+import { disableSaveButton, enableValidation } from "./validate.js";
 
 import {
-  disableSaveButton,
-  enableValidation,
-} from "./validate.js";
+  getProfileData,
+  getCards,
+  patchProfileData,
+  postCard,
+  patchAvatar,
+  user
+} from "./api.js";
 
 //Функция создания новой карточки
 const prependCard = (name, link) => {
   const card = { name, link };
-  const cardElement = createCard(card);
+  /*const userId = user._id;*/
+
+  const cardElement = createCard(card, /*userId*/);
+
+  //отправить на сервер
+  postCard(name, link);
+
   cardContainer.prepend(cardElement);
 };
 
@@ -50,6 +62,8 @@ const createNewAvatar = () => {
   const inputValue = avatarInput.value;
   //элемент, на котором буду менять backgroundImage
   avatarElement.style.backgroundImage = `url(${inputValue})`;
+  //загрузил аватар на сервер
+  patchAvatar(inputValue);
 };
 
 //Функция изменения данных пользователя
@@ -61,7 +75,8 @@ const handleProfileFormSubmit = (evt) => {
   //Вставил новые значения
   nameElement.textContent = nameValue;
   jobElement.textContent = jobValue;
-  //Вместо отправки на сервер, просто закрываю форму
+  //Отправляю на сервер новые данные
+  patchProfileData(nameValue, jobValue);
   closePopup(popupEdit);
 };
 
@@ -73,6 +88,7 @@ formCardElement.addEventListener("submit", (evt) => {
   //чистая форма после добавления карточки
   evt.target.reset();
   disableSaveButton(cardSaveButton);
+
   closePopup(popupAdd);
 });
 
@@ -124,12 +140,6 @@ avatarForm.addEventListener("submit", (evt) => {
 //Обработчик отправки формы редактирования профиля
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 
-//Обработчик массива карточек из коробки
-initialCards.forEach((card) => {
-  const cardElement = createCard(card);
-  cardContainer.prepend(cardElement);
-});
-
 // Включить валидацию форм
 enableValidation({
   formSelector: ".popup__form",
@@ -139,3 +149,6 @@ enableValidation({
   inputErrorClass: "popup__field_type_error",
   errorClass: "popup__field-error_active",
 });
+
+getProfileData();
+getCards();
