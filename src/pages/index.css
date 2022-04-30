@@ -23,6 +23,8 @@
 @import url(../blocks/element/__button-like/element__button-like.css);
 @import url(../blocks/element/__button-like/_active/element__button-like_active.css);
 @import url(../blocks/element/__button-delete/element__button-delete.css);
+@import url(../blocks/element/__counter/element__counter.css);
+@import url(../blocks/element/__like-box/element__like-box.css);
 @import url(../blocks/footer/footer.css);
 @import url(../blocks/footer/__copyright/footer__copyright.css);
 @import url(../blocks/popup/popup.css);

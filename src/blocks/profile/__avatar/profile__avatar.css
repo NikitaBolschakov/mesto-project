@@ -4,9 +4,10 @@
     height: 120px;
     margin: 0 auto;
     cursor: pointer;
-    background-image: url(../../../images/ragnar.jpg);
+    /*background-image: url(../../../images/ragnar.jpg);*/
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center;
     border-radius: 50%;
 }
 

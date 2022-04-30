@@ -1,4 +1,4 @@
-//Массив карточек из коробки
+/*//Массив карточек из коробки
 const initialCards = [
   {
     name: 'Баффинова земля',
@@ -26,4 +26,4 @@ const initialCards = [
   }
 ];
 
-export { initialCards }
+export { initialCards }*/

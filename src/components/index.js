@@ -22,6 +22,7 @@ import {
   closeButtonPopupUpdate,
   updateButton,
   popupImage,
+  editSaveButton,
   cardSaveButton,
   avatarSaveButton,
   avatarInput,
@@ -30,18 +31,34 @@ import {
 
 import { openPopup, closePopup } from "./modal.js";
 
-import { initialCards, createCard } from "./card.js";
+import { createCard } from "./card.js";
+
+import { disableSaveButton, enableValidation } from "./validate.js";
 
 import {
-  disableSaveButton,
-  enableValidation,
-} from "./validate.js";
+  renderProfileData,
+  getProfileData,
+  getCards,
+  patchProfileData,
+  postCard,
+  patchAvatar,
+} from "./api.js";
+
+import { renderLoading } from "./utils.js";
 
 //Функция создания новой карточки
 const prependCard = (name, link) => {
-  const card = { name, link };
-  const cardElement = createCard(card);
-  cardContainer.prepend(cardElement);
+  //отправить на сервер и добавить в DOM
+  postCard(name, link)
+    .then((res) => {
+      cardContainer.prepend(createCard(res, res.owner._id));
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoading(false, cardSaveButton);
+    });
 };
 
 //Функция создания аватара
@@ -50,30 +67,63 @@ const createNewAvatar = () => {
   const inputValue = avatarInput.value;
   //элемент, на котором буду менять backgroundImage
   avatarElement.style.backgroundImage = `url(${inputValue})`;
+  //загрузил аватар на сервер
+  patchAvatar(inputValue)
+    .then((res) => {
+      renderProfileData(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoading(false, avatarSaveButton);
+    });
 };
 
 //Функция изменения данных пользователя
 const handleProfileFormSubmit = (evt) => {
   evt.preventDefault();
+  renderLoading(true, editSaveButton);
   //Нашёл значения полей
   const nameValue = nameInput.value;
   const jobValue = jobInput.value;
   //Вставил новые значения
   nameElement.textContent = nameValue;
   jobElement.textContent = jobValue;
-  //Вместо отправки на сервер, просто закрываю форму
+  //Отправляю на сервер новые данные
+  patchProfileData(nameValue, jobValue)
+    .then((res) => {
+      renderProfileData(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoading(false, editSaveButton);
+    });
   closePopup(popupEdit);
 };
 
 //Обработчик отправки формы с карточкой
 formCardElement.addEventListener("submit", (evt) => {
   evt.preventDefault();
+  renderLoading(true, cardSaveButton);
   //значение полей ввода как аргументы функции
   prependCard(titleCard.value, linkCard.value);
   //чистая форма после добавления карточки
   evt.target.reset();
   disableSaveButton(cardSaveButton);
   closePopup(popupAdd);
+});
+
+//Обработчик отправки формы изменения аватара
+avatarForm.addEventListener("submit", (evt) => {
+  evt.preventDefault();
+  renderLoading(true, avatarSaveButton);
+  createNewAvatar();
+  evt.target.reset();
+  disableSaveButton(avatarSaveButton);
+  closePopup(popupUpdate);
 });
 
 //Открыть pop-up "Редактирование профиля"
@@ -112,23 +162,8 @@ closeButtonPopupUpdate.addEventListener("click", () => {
   closePopup(popupUpdate);
 });
 
-//обработка отправки формы изменения аватара
-avatarForm.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  createNewAvatar();
-  evt.target.reset();
-  disableSaveButton(avatarSaveButton);
-  closePopup(popupUpdate);
-});
-
 //Обработчик отправки формы редактирования профиля
 profileForm.addEventListener("submit", handleProfileFormSubmit);
-
-//Обработчик массива карточек из коробки
-initialCards.forEach((card) => {
-  const cardElement = createCard(card);
-  cardContainer.prepend(cardElement);
-});
 
 // Включить валидацию форм
 enableValidation({
@@ -139,3 +174,15 @@ enableValidation({
   inputErrorClass: "popup__field_type_error",
   errorClass: "popup__field-error_active",
 });
+
+// Связываю два промиса, получаю из getProfileData() "user._id" для createCard()
+Promise.all([getProfileData(), getCards()]) //Когда выполнятся два запроса
+  .then(([profile, cards]) => {             //"при положительном ответе": отдай массив из полученных значений
+    renderProfileData(profile);             //отредактируй данные профиля используя значение user
+    cards.forEach((card) => {               //пройдись по полученному объекту, добавь в DOM каждую карточку
+      cardContainer.append(createCard(card, profile._id));
+    });
+  })
+  .catch((err) => {                         //"при отрицательном ответе": выведи ошибку в консоль
+    console.log(err);
+  });
