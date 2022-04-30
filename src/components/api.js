@@ -2,10 +2,10 @@ import {
   nameElement,
   jobElement,
   avatarElement,
-  cardContainer,
+  nameInput,
+  jobInput
 } from "./constants.js";
 
-import { createCard } from "./card";
 
 const config = {
   baseUrl: "https://mesto.nomoreparties.co/v1/plus-cohort-9",
@@ -15,59 +15,36 @@ const config = {
   },
 };
 
-let user;
+const handleRespons = (res) => {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`)
+}
 
 // Использование полученных данных о пользователе
 const renderProfileData = (data) => {
-  console.log(data._id);
-  user = data._id; 
   nameElement.textContent = data.name;
   jobElement.textContent = data.about;
   avatarElement.style.backgroundImage = `url(${data.avatar})`;
+  nameInput.value = data.name;
+  jobInput.value = data.about;
 };
-
 
 // Запрос данных о пользователе
 const getProfileData = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((res) => {
-      renderProfileData(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    .then(handleRespons)
 };
-
-
 
 // Запрос карточек
 const getCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((res) => {
-      res.forEach((card) => {
-        const cardElement = createCard(card /*user._id*/);
-        cardContainer.append(cardElement);
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    .then(handleRespons)
 };
 
 // Отправка данных о пользователе
@@ -80,18 +57,7 @@ const patchProfileData = (name, status) => {
       about: status,
     }),
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((res) => {
-      renderProfileData(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    .then(handleRespons)
 };
 
 //Смена аватара
@@ -103,18 +69,7 @@ const patchAvatar = (link) => {
       avatar: link,
     }),
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((res) => {
-      renderProfileData(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    .then(handleRespons)
 };
 
 // Добавление новой карточки
@@ -127,18 +82,7 @@ const postCard = (name, link) => {
       link: link,
     }),
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    .then(handleRespons)
 };
 
 //Удаление карточки
@@ -146,16 +90,36 @@ const deleteCard = (card_id) => {
   return fetch(`${config.baseUrl}/cards/${card_id}`, {
     method: "DELETE",
     headers: config.headers,
-  });
-  //методы .then в createCard
+  })
+  .then(handleRespons)
 };
 
+//отправка лайка
+const putLike = (card_id) => {
+  return fetch(`${config.baseUrl}/cards/likes/${card_id}`, {
+    method: "PUT",
+    headers: config.headers
+  })
+  .then(handleRespons)
+}
+
+//удаление лайка
+const deleteLike = (card_id) => {
+  return fetch(`${config.baseUrl}/cards/likes/${card_id}`, {
+    method: "DELETE",
+    headers: config.headers
+  })
+  .then(handleRespons)
+}
+
 export {
+  renderProfileData,
   getProfileData,
   getCards,
   patchProfileData,
   patchAvatar,
   postCard,
   deleteCard,
-  user,
+  putLike,
+  deleteLike
 };
