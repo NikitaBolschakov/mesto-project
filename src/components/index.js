@@ -27,6 +27,7 @@ import {
   avatarSaveButton,
   avatarInput,
   avatarElement,
+  cardTemplate
 } from "./constants.js";
 
 import { openPopup, closePopup } from "./modal.js";
@@ -36,7 +37,6 @@ import { createCard } from "./card.js";
 import { disableSaveButton, enableValidation } from "./validate.js";
 
 import {
-  renderProfileData,
   getProfileData,
   getCards,
   patchProfileData,
@@ -46,12 +46,28 @@ import {
 
 import { renderLoading } from "./utils.js";
 
+const resetForm = (form) => {
+  form.reset();
+}
+
+// Использование полученных данных о пользователе
+const renderProfileData = (data) => {
+  nameElement.textContent = data.name;
+  jobElement.textContent = data.about;
+  nameInput.value = data.name;
+  jobInput.value = data.about;
+  avatarElement.style.backgroundImage = `url(${data.avatar})`;
+};
+
 //Функция создания новой карточки
 const prependCard = (name, link) => {
   //отправить на сервер и добавить в DOM
   postCard(name, link)
     .then((res) => {
       cardContainer.prepend(createCard(res, res.owner._id));
+      closePopup(popupAdd);
+      resetForm(formCardElement);
+      disableSaveButton(cardSaveButton);
     })
     .catch((err) => {
       console.log(err);
@@ -63,14 +79,15 @@ const prependCard = (name, link) => {
 
 //Функция создания аватара
 const createNewAvatar = () => {
-  //нашел значение поля ввода - ссылку
   const inputValue = avatarInput.value;
-  //элемент, на котором буду менять backgroundImage
-  avatarElement.style.backgroundImage = `url(${inputValue})`;
   //загрузил аватар на сервер
   patchAvatar(inputValue)
     .then((res) => {
       renderProfileData(res);
+      avatarElement.style.backgroundImage = `url(${inputValue})`;
+      closePopup(popupUpdate);
+      resetForm(avatarForm);
+      disableSaveButton(avatarSaveButton);
     })
     .catch((err) => {
       console.log(err);
@@ -84,16 +101,15 @@ const createNewAvatar = () => {
 const handleProfileFormSubmit = (evt) => {
   evt.preventDefault();
   renderLoading(true, editSaveButton);
-  //Нашёл значения полей
   const nameValue = nameInput.value;
   const jobValue = jobInput.value;
-  //Вставил новые значения
-  nameElement.textContent = nameValue;
-  jobElement.textContent = jobValue;
   //Отправляю на сервер новые данные
   patchProfileData(nameValue, jobValue)
     .then((res) => {
       renderProfileData(res);
+      nameElement.textContent = nameValue;
+      jobElement.textContent = jobValue;
+      closePopup(popupEdit);
     })
     .catch((err) => {
       console.log(err);
@@ -101,8 +117,34 @@ const handleProfileFormSubmit = (evt) => {
     .finally(() => {
       renderLoading(false, editSaveButton);
     });
-  closePopup(popupEdit);
 };
+
+/*const cardElement = cardTemplate.querySelector(".element").cloneNode(true);
+const likeCounter = cardElement.querySelector(".element__counter");
+const likeButton = cardElement.querySelector(".element__button-like");
+
+//Лайки
+likeButton.addEventListener("click", (evt) => {
+  if (!evt.target.classList.contains("element__button-like_active")) {
+    putLike(card._id)
+      .then((res) => {
+        likeButton.classList.add("element__button-like_active");
+        likeCounter.textContent = res.likes.length;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    deleteLike(card._id)
+      .then((res) => {
+        likeButton.classList.remove("element__button-like_active");
+        likeCounter.textContent = res.likes.length;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+});*/
 
 //Обработчик отправки формы с карточкой
 formCardElement.addEventListener("submit", (evt) => {
@@ -110,10 +152,6 @@ formCardElement.addEventListener("submit", (evt) => {
   renderLoading(true, cardSaveButton);
   //значение полей ввода как аргументы функции
   prependCard(titleCard.value, linkCard.value);
-  //чистая форма после добавления карточки
-  evt.target.reset();
-  disableSaveButton(cardSaveButton);
-  closePopup(popupAdd);
 });
 
 //Обработчик отправки формы изменения аватара
@@ -121,9 +159,6 @@ avatarForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
   renderLoading(true, avatarSaveButton);
   createNewAvatar();
-  evt.target.reset();
-  disableSaveButton(avatarSaveButton);
-  closePopup(popupUpdate);
 });
 
 //Открыть pop-up "Редактирование профиля"

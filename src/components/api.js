@@ -1,12 +1,3 @@
-import {
-  nameElement,
-  jobElement,
-  avatarElement,
-  nameInput,
-  jobInput
-} from "./constants.js";
-
-
 const config = {
   baseUrl: "https://mesto.nomoreparties.co/v1/plus-cohort-9",
   headers: {
@@ -21,15 +12,6 @@ const handleRespons = (res) => {
   }
   return Promise.reject(`Ошибка: ${res.status}`)
 }
-
-// Использование полученных данных о пользователе
-const renderProfileData = (data) => {
-  nameElement.textContent = data.name;
-  jobElement.textContent = data.about;
-  avatarElement.style.backgroundImage = `url(${data.avatar})`;
-  nameInput.value = data.name;
-  jobInput.value = data.about;
-};
 
 // Запрос данных о пользователе
 const getProfileData = () => {
@@ -113,7 +95,6 @@ const deleteLike = (card_id) => {
 }
 
 export {
-  renderProfileData,
   getProfileData,
   getCards,
   patchProfileData,
