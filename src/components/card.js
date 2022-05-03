@@ -2,12 +2,12 @@ import {
   cardTemplate,
   popupImagePicture,
   popupImageCaption,
-  popupImage,
+  popupImage
 } from "./constants.js";
 
 import { openPopup } from "./modal.js";
 
-import { deleteCard, putLike, deleteLike } from "./api.js";
+import { callRequestDeleteCard, callRequestPutLike, callRequestDeleteLike } from "./index.js";
 
 //Функция создания карточки
 const createCard = (card, userId) => {
@@ -35,23 +35,12 @@ const createCard = (card, userId) => {
   //лайки
   likeButton.addEventListener("click", (evt) => {
     if (!evt.target.classList.contains("element__button-like_active")) {
-      putLike(card._id)
-        .then((res) => {
-          likeButton.classList.add("element__button-like_active");
-          likeCounter.textContent = res.likes.length;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      deleteLike(card._id)
-        .then((res) => {
-          likeButton.classList.remove("element__button-like_active");
-          likeCounter.textContent = res.likes.length;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      //точка расширения
+      callRequestPutLike(card._id, cardElement);
+    }
+    else {
+      //точка расширения
+      callRequestDeleteLike(card._id, cardElement);
     }
   });
 
@@ -64,24 +53,15 @@ const createCard = (card, userId) => {
   if (isUserLiked) {
     likeButton.classList.add("element__button-like_active");
   }
-
-  //удаление карточки
+  
   deleteButton.addEventListener("click", () => {
-    deleteCard(card._id)
-      .then(() => {
-        cardElement.remove();
-        cardElement = null;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    callRequestDeleteCard(card._id, cardElement);
   });
 
   //кнопки удаления только на свои карточки
   if (card.owner._id === userId) {
     deleteButton.style.display = "block";
   }
-
   return cardElement;
 };
 

@@ -67,5 +67,5 @@ export {
   avatarSaveButton,
   avatarInput,
   avatarElement,
-  selectors,
+  selectors
 };

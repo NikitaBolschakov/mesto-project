@@ -26,8 +26,7 @@ import {
   cardSaveButton,
   avatarSaveButton,
   avatarInput,
-  avatarElement,
-  cardTemplate
+  avatarElement
 } from "./constants.js";
 
 import { openPopup, closePopup } from "./modal.js";
@@ -42,13 +41,57 @@ import {
   patchProfileData,
   postCard,
   patchAvatar,
+  deleteCard,
+  putLike,
+  deleteLike
 } from "./api.js";
 
 import { renderLoading } from "./utils.js";
 
+//Функция вызова запроса удаления карточки
+const callRequestDeleteCard = (cardId, element) => {
+  deleteCard(cardId)
+    .then(() => {
+      element.remove();
+      element = null;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+//Функция вызова запроса постановки лайка
+const callRequestPutLike = (cardId, element) => {
+  putLike(cardId)
+    .then((res) => {
+      const likeCounter = element.querySelector(".element__counter");
+      const likeButton = element.querySelector(".element__button-like");
+      likeButton.classList.add("element__button-like_active");
+      likeCounter.textContent = res.likes.length;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+//Функция вызова запроса удаления лайка
+const callRequestDeleteLike = (cardId, element) => {
+  deleteLike(cardId)
+    .then((res) => {
+      const likeCounter = element.querySelector(".element__counter");
+      const likeButton = element.querySelector(".element__button-like");
+      likeButton.classList.remove("element__button-like_active");
+      likeCounter.textContent = res.likes.length;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+//Функция очистки формы
 const resetForm = (form) => {
   form.reset();
-}
+};
 
 // Использование полученных данных о пользователе
 const renderProfileData = (data) => {
@@ -119,33 +162,6 @@ const handleProfileFormSubmit = (evt) => {
     });
 };
 
-/*const cardElement = cardTemplate.querySelector(".element").cloneNode(true);
-const likeCounter = cardElement.querySelector(".element__counter");
-const likeButton = cardElement.querySelector(".element__button-like");
-
-//Лайки
-likeButton.addEventListener("click", (evt) => {
-  if (!evt.target.classList.contains("element__button-like_active")) {
-    putLike(card._id)
-      .then((res) => {
-        likeButton.classList.add("element__button-like_active");
-        likeCounter.textContent = res.likes.length;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } else {
-    deleteLike(card._id)
-      .then((res) => {
-        likeButton.classList.remove("element__button-like_active");
-        likeCounter.textContent = res.likes.length;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-});*/
-
 //Обработчик отправки формы с карточкой
 formCardElement.addEventListener("submit", (evt) => {
   evt.preventDefault();
@@ -212,12 +228,17 @@ enableValidation({
 
 // Связываю два промиса, получаю из getProfileData() "user._id" для createCard()
 Promise.all([getProfileData(), getCards()]) //Когда выполнятся два запроса
-  .then(([profile, cards]) => {             //"при положительном ответе": отдай массив из полученных значений
-    renderProfileData(profile);             //отредактируй данные профиля используя значение user
-    cards.forEach((card) => {               //пройдись по полученному объекту, добавь в DOM каждую карточку
+  .then(([profile, cards]) => {
+    //"при положительном ответе": отдай массив из полученных значений
+    renderProfileData(profile); //отредактируй данные профиля используя значение user
+    cards.forEach((card) => {
+      //пройдись по полученному объекту, добавь в DOM каждую карточку
       cardContainer.append(createCard(card, profile._id));
     });
   })
-  .catch((err) => {                         //"при отрицательном ответе": выведи ошибку в консоль
+  .catch((err) => {
+    //"при отрицательном ответе": выведи ошибку в консоль
     console.log(err);
   });
+
+  export { callRequestDeleteCard, callRequestPutLike, callRequestDeleteLike }
