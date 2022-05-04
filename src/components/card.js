@@ -13,6 +13,7 @@ import { openPopup } from "./modal.js";
 const removeCard = (card) => {
   card.remove();
   card = null;
+
 }
 
 //Функция рендеринга "Лайк добавлен"
@@ -78,9 +79,9 @@ const createCard = (card, userId, callbackPutLike, callbackDelLike, callbackDelC
     likeButton.classList.add("element__button-like_active");
   }
   
-  deleteButton.addEventListener("click", (callbackDelCard) => {
-    //callbackDelCard(card._id, cardElement);
-    callRequestDeleteCard(card._id, cardElement);
+  deleteButton.addEventListener("click", () => {
+    callbackDelCard(card._id, cardElement);
+    //callRequestDeleteCard(card._id, cardElement);
   });
 
   //кнопки удаления только на свои карточки
