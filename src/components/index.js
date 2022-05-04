@@ -26,12 +26,12 @@ import {
   cardSaveButton,
   avatarSaveButton,
   avatarInput,
-  avatarElement
+  avatarElement,
 } from "./constants.js";
 
 import { openPopup, closePopup } from "./modal.js";
 
-import { createCard } from "./card.js";
+import { createCard, addLike, removeLike, removeCard } from "./card.js";
 
 import { disableSaveButton, enableValidation } from "./validate.js";
 
@@ -43,7 +43,7 @@ import {
   patchAvatar,
   deleteCard,
   putLike,
-  deleteLike
+  deleteLike,
 } from "./api.js";
 
 import { renderLoading } from "./utils.js";
@@ -51,10 +51,9 @@ import { renderLoading } from "./utils.js";
 //Функция вызова запроса удаления карточки
 const callRequestDeleteCard = (cardId, element) => {
   deleteCard(cardId)
-    .then(() => {
-      element.remove();
-      element = null;
-    })
+    .then(
+      removeCard(element)
+    )
     .catch((err) => {
       console.log(err);
     });
@@ -64,10 +63,7 @@ const callRequestDeleteCard = (cardId, element) => {
 const callRequestPutLike = (cardId, element) => {
   putLike(cardId)
     .then((res) => {
-      const likeCounter = element.querySelector(".element__counter");
-      const likeButton = element.querySelector(".element__button-like");
-      likeButton.classList.add("element__button-like_active");
-      likeCounter.textContent = res.likes.length;
+      addLike(res, element)
     })
     .catch((err) => {
       console.log(err);
@@ -78,10 +74,7 @@ const callRequestPutLike = (cardId, element) => {
 const callRequestDeleteLike = (cardId, element) => {
   deleteLike(cardId)
     .then((res) => {
-      const likeCounter = element.querySelector(".element__counter");
-      const likeButton = element.querySelector(".element__button-like");
-      likeButton.classList.remove("element__button-like_active");
-      likeCounter.textContent = res.likes.length;
+      removeLike(res, element)
     })
     .catch((err) => {
       console.log(err);
@@ -107,7 +100,15 @@ const prependCard = (name, link) => {
   //отправить на сервер и добавить в DOM
   postCard(name, link)
     .then((res) => {
-      cardContainer.prepend(createCard(res, res.owner._id));
+      cardContainer.prepend(
+        createCard(
+          res,
+          res.owner._id,
+          callRequestPutLike,
+          callRequestDeleteLike,
+          callRequestDeleteCard
+        )
+      );
       closePopup(popupAdd);
       resetForm(formCardElement);
       disableSaveButton(cardSaveButton);
@@ -241,4 +242,4 @@ Promise.all([getProfileData(), getCards()]) //Когда выполнятся д
     console.log(err);
   });
 
-  export { callRequestDeleteCard, callRequestPutLike, callRequestDeleteLike }
+export { callRequestDeleteCard, callRequestPutLike, callRequestDeleteLike };

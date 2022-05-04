@@ -7,10 +7,32 @@ import {
 
 import { openPopup } from "./modal.js";
 
-import { callRequestDeleteCard, callRequestPutLike, callRequestDeleteLike } from "./index.js";
+//import { callRequestDeleteCard, callRequestPutLike, callRequestDeleteLike } from "./index.js";
+
+//Функция удаления карточки из DOM
+const removeCard = (card) => {
+  card.remove();
+  card = null;
+}
+
+//Функция рендеринга "Лайк добавлен"
+const addLike = (arr, element) => {
+  const likeCounter = element.querySelector(".element__counter");
+  const likeButton = element.querySelector(".element__button-like"); 
+  likeButton.classList.add("element__button-like_active"); 
+  likeCounter.textContent = arr.likes.length; 
+}
+
+//Функция рендеринга "Лайк снят"
+const removeLike = (arr, element) => {
+  const likeCounter = element.querySelector(".element__counter");
+  const likeButton = element.querySelector(".element__button-like"); 
+  likeButton.classList.remove("element__button-like_active"); 
+  likeCounter.textContent = arr.likes.length; 
+}
 
 //Функция создания карточки
-const createCard = (card, userId) => {
+const createCard = (card, userId, callbackPutLike, callbackDelLike, callbackDelCard) => {
   const cardElement = cardTemplate.querySelector(".element").cloneNode(true);
   const titleCardElement = cardElement.querySelector(".element__title");
   const imageCardElement = cardElement.querySelector(".element__image");
@@ -36,11 +58,13 @@ const createCard = (card, userId) => {
   likeButton.addEventListener("click", (evt) => {
     if (!evt.target.classList.contains("element__button-like_active")) {
       //точка расширения
-      callRequestPutLike(card._id, cardElement);
+      callbackPutLike(card._id, cardElement);
+      //callRequestPutLike(card._id, cardElement);
     }
     else {
       //точка расширения
-      callRequestDeleteLike(card._id, cardElement);
+      callbackDelLike(card._id, cardElement);
+      //callRequestDeleteLike(card._id, cardElement);
     }
   });
 
@@ -54,7 +78,8 @@ const createCard = (card, userId) => {
     likeButton.classList.add("element__button-like_active");
   }
   
-  deleteButton.addEventListener("click", () => {
+  deleteButton.addEventListener("click", (callbackDelCard) => {
+    //callbackDelCard(card._id, cardElement);
     callRequestDeleteCard(card._id, cardElement);
   });
 
@@ -65,4 +90,4 @@ const createCard = (card, userId) => {
   return cardElement;
 };
 
-export { createCard };
+export { createCard, addLike, removeLike, removeCard };
