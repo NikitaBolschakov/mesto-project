@@ -31,7 +31,7 @@ import {
 
 import { openPopup, closePopup } from "./modal.js";
 
-import { createCard, addLike, removeLike, removeCard } from "./card.js";
+import { createCard, addLike, removeLike, removeCard  } from "./card.js";
 
 import { disableSaveButton, enableValidation } from "./validate.js";
 
@@ -234,12 +234,11 @@ Promise.all([getProfileData(), getCards()]) //Когда выполнятся д
     renderProfileData(profile); //отредактируй данные профиля используя значение user
     cards.forEach((card) => {
       //пройдись по полученному объекту, добавь в DOM каждую карточку
-      cardContainer.append(createCard(card, profile._id));
+      cardContainer.append(createCard(card, profile._id, callRequestPutLike,
+        callRequestDeleteLike, callRequestDeleteCard))
     });
   })
   .catch((err) => {
     //"при отрицательном ответе": выведи ошибку в консоль
     console.log(err);
   });
-
-export { callRequestDeleteCard, callRequestPutLike, callRequestDeleteLike };

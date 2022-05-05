@@ -2,38 +2,35 @@ import {
   cardTemplate,
   popupImagePicture,
   popupImageCaption,
-  popupImage
+  popupImage,
 } from "./constants.js";
 
 import { openPopup } from "./modal.js";
-
-//import { callRequestDeleteCard, callRequestPutLike, callRequestDeleteLike } from "./index.js";
 
 //Функция удаления карточки из DOM
 const removeCard = (card) => {
   card.remove();
   card = null;
-
-}
+};
 
 //Функция рендеринга "Лайк добавлен"
 const addLike = (arr, element) => {
   const likeCounter = element.querySelector(".element__counter");
-  const likeButton = element.querySelector(".element__button-like"); 
-  likeButton.classList.add("element__button-like_active"); 
-  likeCounter.textContent = arr.likes.length; 
-}
+  const likeButton = element.querySelector(".element__button-like");
+  likeButton.classList.add("element__button-like_active");
+  likeCounter.textContent = arr.likes.length;
+};
 
 //Функция рендеринга "Лайк снят"
 const removeLike = (arr, element) => {
   const likeCounter = element.querySelector(".element__counter");
-  const likeButton = element.querySelector(".element__button-like"); 
-  likeButton.classList.remove("element__button-like_active"); 
-  likeCounter.textContent = arr.likes.length; 
-}
+  const likeButton = element.querySelector(".element__button-like");
+  likeButton.classList.remove("element__button-like_active");
+  likeCounter.textContent = arr.likes.length;
+};
 
 //Функция создания карточки
-const createCard = (card, userId, callbackPutLike, callbackDelLike, callbackDelCard) => {
+const createCard = (card, userId, pressLike, delLike, delCard ) => {
   const cardElement = cardTemplate.querySelector(".element").cloneNode(true);
   const titleCardElement = cardElement.querySelector(".element__title");
   const imageCardElement = cardElement.querySelector(".element__image");
@@ -58,30 +55,24 @@ const createCard = (card, userId, callbackPutLike, callbackDelLike, callbackDelC
   //лайки
   likeButton.addEventListener("click", (evt) => {
     if (!evt.target.classList.contains("element__button-like_active")) {
-      //точка расширения
-      callbackPutLike(card._id, cardElement);
-      //callRequestPutLike(card._id, cardElement);
-    }
-    else {
-      //точка расширения
-      callbackDelLike(card._id, cardElement);
-      //callRequestDeleteLike(card._id, cardElement);
+      pressLike(card._id, cardElement);
+    } else {
+      delLike(card._id, cardElement);
     }
   });
 
   //проверка массива card.likes на наличие лайка пользователя
   const isUserLiked = card.likes.some((user) => {
     return user._id === userId;
-  })
+  });
 
   //активируй лайк если колбек вернул true
   if (isUserLiked) {
     likeButton.classList.add("element__button-like_active");
   }
-  
+
   deleteButton.addEventListener("click", () => {
-    callbackDelCard(card._id, cardElement);
-    //callRequestDeleteCard(card._id, cardElement);
+    delCard(card._id, cardElement);
   });
 
   //кнопки удаления только на свои карточки
