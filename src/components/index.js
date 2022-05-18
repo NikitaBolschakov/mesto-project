@@ -36,14 +36,15 @@ import { createCard, addLike, removeLike, removeCard  } from "./card.js";
 import { disableSaveButton, enableValidation } from "./validate.js";
 
 import {
-  getProfileData,
+  /*getProfileData,
   getCards,
   patchProfileData,
   postCard,
   patchAvatar,
   deleteCard,
   putLike,
-  deleteLike,
+  deleteLike,*/
+  api
 } from "./api.js";
 
 import { renderLoading } from "./utils.js";
@@ -228,7 +229,7 @@ enableValidation({
 });
 
 // Связываю два промиса, получаю из getProfileData() "user._id" для createCard()
-Promise.all([getProfileData(), getCards()]) //Когда выполнятся два запроса
+Promise.all([api.getProfileData(), api.getCards()]) //Когда выполнятся два запроса
   .then(([profile, cards]) => {
     //"при положительном ответе": отдай массив из полученных значений
     renderProfileData(profile); //отредактируй данные профиля используя значение user
