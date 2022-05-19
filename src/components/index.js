@@ -51,7 +51,7 @@ import { renderLoading } from "./utils.js";
 
 //Функция вызова запроса удаления карточки
 const callRequestDeleteCard = (cardId, element) => {
-  deleteCard(cardId)
+  api.deleteCard(cardId)
     .then(
       removeCard(element)
     )
@@ -62,7 +62,7 @@ const callRequestDeleteCard = (cardId, element) => {
 
 //Функция вызова запроса постановки лайка
 const callRequestPutLike = (cardId, element) => {
-  putLike(cardId)
+  api.putLike(cardId)
     .then((res) => {
       addLike(res, element)
     })
@@ -73,7 +73,7 @@ const callRequestPutLike = (cardId, element) => {
 
 //Функция вызова запроса удаления лайка
 const callRequestDeleteLike = (cardId, element) => {
-  deleteLike(cardId)
+  api.deleteLike(cardId)
     .then((res) => {
       removeLike(res, element)
     })
@@ -99,7 +99,7 @@ const renderProfileData = (data) => {
 //Функция создания новой карточки
 const prependCard = (name, link) => {
   //отправить на сервер и добавить в DOM
-  postCard(name, link)
+  api.postCard(name, link)
     .then((res) => {
       cardContainer.prepend(
         createCard(
@@ -126,7 +126,7 @@ const prependCard = (name, link) => {
 const createNewAvatar = () => {
   const inputValue = avatarInput.value;
   //загрузил аватар на сервер
-  patchAvatar(inputValue)
+  api.patchAvatar(inputValue)
     .then((res) => {
       renderProfileData(res);
       avatarElement.style.backgroundImage = `url(${inputValue})`;
@@ -149,7 +149,7 @@ const handleProfileFormSubmit = (evt) => {
   const nameValue = nameInput.value;
   const jobValue = jobInput.value;
   //Отправляю на сервер новые данные
-  patchProfileData(nameValue, jobValue)
+  api.patchProfileData(nameValue, jobValue)
     .then((res) => {
       renderProfileData(res);
       nameElement.textContent = nameValue;
