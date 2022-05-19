@@ -31,26 +31,17 @@ import {
 
 import { openPopup, closePopup } from "./modal.js";
 
-import { createCard, addLike, removeLike, removeCard  } from "./card.js";
+import Card from "./card.js";
 
 import { disableSaveButton, enableValidation } from "./validate.js";
 
-import {
-  getProfileData,
-  getCards,
-  patchProfileData,
-  postCard,
-  patchAvatar,
-  deleteCard,
-  putLike,
-  deleteLike,
-} from "./api.js";
+import { api } from "./api.js";
 
 import { renderLoading } from "./utils.js";
 
 //Функция вызова запроса удаления карточки
 const callRequestDeleteCard = (cardId, element) => {
-  deleteCard(cardId)
+  api.deleteCard(cardId)
     .then(
       removeCard(element)
     )
@@ -61,7 +52,7 @@ const callRequestDeleteCard = (cardId, element) => {
 
 //Функция вызова запроса постановки лайка
 const callRequestPutLike = (cardId, element) => {
-  putLike(cardId)
+  api.putLike(cardId)
     .then((res) => {
       addLike(res, element)
     })
@@ -72,7 +63,7 @@ const callRequestPutLike = (cardId, element) => {
 
 //Функция вызова запроса удаления лайка
 const callRequestDeleteLike = (cardId, element) => {
-  deleteLike(cardId)
+  api.deleteLike(cardId)
     .then((res) => {
       removeLike(res, element)
     })
@@ -98,17 +89,11 @@ const renderProfileData = (data) => {
 //Функция создания новой карточки
 const prependCard = (name, link) => {
   //отправить на сервер и добавить в DOM
-  postCard(name, link)
-    .then((res) => {
-      cardContainer.prepend(
-        createCard(
-          res,
-          res.owner._id,
-          callRequestPutLike,
-          callRequestDeleteLike,
-          callRequestDeleteCard
-        )
-      );
+  api.postCard(name, link)
+    .then((data) => {
+      const newCard = new Card(data, api, '#card');
+      const newCardElement = newCard.generate();
+      cardContainer.prepend(newCardElement);
       closePopup(popupAdd);
       resetForm(formCardElement);
       disableSaveButton(cardSaveButton);
@@ -125,7 +110,7 @@ const prependCard = (name, link) => {
 const createNewAvatar = () => {
   const inputValue = avatarInput.value;
   //загрузил аватар на сервер
-  patchAvatar(inputValue)
+  api.patchAvatar(inputValue)
     .then((res) => {
       renderProfileData(res);
       avatarElement.style.backgroundImage = `url(${inputValue})`;
@@ -148,7 +133,7 @@ const handleProfileFormSubmit = (evt) => {
   const nameValue = nameInput.value;
   const jobValue = jobInput.value;
   //Отправляю на сервер новые данные
-  patchProfileData(nameValue, jobValue)
+  api.patchProfileData(nameValue, jobValue)
     .then((res) => {
       renderProfileData(res);
       nameElement.textContent = nameValue;
@@ -228,14 +213,16 @@ enableValidation({
 });
 
 // Связываю два промиса, получаю из getProfileData() "user._id" для createCard()
-Promise.all([getProfileData(), getCards()]) //Когда выполнятся два запроса
+Promise.all([api.getProfileData(), api.getCards()]) //Когда выполнятся два запроса
   .then(([profile, cards]) => {
+    let user = profile;
     //"при положительном ответе": отдай массив из полученных значений
     renderProfileData(profile); //отредактируй данные профиля используя значение user
-    cards.forEach((card) => {
+    cards.forEach((element) => {
+      const newCard = new Card(element, user, api, '#card');
+      const newCardElement = newCard.generate();
       //пройдись по полученному объекту, добавь в DOM каждую карточку
-      cardContainer.append(createCard(card, profile._id, callRequestPutLike,
-        callRequestDeleteLike, callRequestDeleteCard))
+      cardContainer.append(newCardElement)
     });
   })
   .catch((err) => {

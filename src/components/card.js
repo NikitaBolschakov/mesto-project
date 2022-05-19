@@ -1,12 +1,11 @@
 import {
-  cardTemplate,
   popupImagePicture,
   popupImageCaption,
   popupImage,
 } from "./constants.js";
 
 import { openPopup } from "./modal.js";
-
+/*
 //Функция удаления карточки из DOM
 const removeCard = (card) => {
   card.remove();
@@ -86,25 +85,21 @@ export { createCard, addLike, removeLike, removeCard };
 
 
 
-
-
-
-
-
-
-
+*/
 
 //========================================================================================
 
 
-class Card {
-  constructor (data/*это объект получаемой карточки*/, api, selector/*ее template-элемент*/) {
+export default class Card {
+  constructor (data, user, api, selector) {
     this._name = data.name; //название карточки
     this._link = data.link; //ссылка на картинку
+    this._likes = data.likes; //массив лайков
     this._counter = data.likes.length; //кол-во лайков
     this._id = data._id; //id карточки
+    this._userId = user._id;
     this._ownerId = data.owner._id; //id автора
-    this._api = api;
+    this._api = api; //запросы апи
     this._selector = selector; //разметка карточки
   }
 
@@ -131,65 +126,91 @@ class Card {
     this._element.querySelector('.element__counter').textContent = this._counter //кол-во лайков
 
     //добавить условие появления кнопки делит
+    if (this._ownerId === this._userId) {
+      this._element.querySelector(".element__button-delete").style.display = "block";
+    }
+    
+    //проверка массива this._likes на наличие лайка пользователя
+    const isUserLiked = this._likes.some((user) => {
+      return this._userId === user._id;
+    });
 
-    //добавить условие отображение лайка пользователя
+    //активируй лайк если колбек вернул true
+    if (isUserLiked) {
+      this._element.querySelector('.element__button-like').classList.add("element__button-like_active");
+    }
 
     return this._element; //возвращаем полностью готовую карточку
   }
+
+  
 
   //Метод устанавливает слушатели событий
   _setEventListeners() {
     
     //слушатель на лайк
     this._element.querySelector('.element__button-like').addEventListener("click", () => {
-      this._toggleLike();
+      this._handleToggleLike();
       })
-    }
-
-    //слушатель на открытие попапа с изображением
     
 
+    //слушатель на открытие попапа с изображением
+    this._element.querySelector('.element__image').addEventListener("click", () => {
+      this._handleOpenPopup();
+      })
+
     //слушатель на кнопку делит
-   
+    this._element.querySelector('.element__button-delete').addEventListener("click", () => {
+      this._handleRemoveCard();
+      })
+
+   }
 
   //метод обработчик на лайк
-  _toggleLike() {
-    if (!evt.target.classList.contains("element__button-like_active")) {
-      this._api.putLike(card_id)
+  _handleToggleLike() {
+    if (this._element.querySelector('.element__button-like').classList.contains("element__button-like_active")) {
+      this._api.deleteLike(this._id)
       .then((data) => {
-        this._counter.textContent = data.likes.length;
-        //+ кнопке лайк добавится активный класс
+        this._element.querySelector('.element__counter').textContent = data.likes.length;
+        this._element.querySelector('.element__button-like').classList.remove('element__button-like_active');
       })
       .catch((err) => console.log(err))
     } else {
-      this._api.deleteLike(this._id)
+      this._api.putLike(this._id)
       .then((data) => {
-        this._counter.textContent = data.likes.length;
-        //+ кнопке лайк добавится неактивный класс
+        this._element.querySelector('.element__counter').textContent = data.likes.length;
+        this._element.querySelector('.element__button-like').classList.add('element__button-like_active');
       })
       .catch((err) => console.log(err));
       }
   }
-  //метод обработчик на открытие попапа с изображением
-
   
+  //метод обработчик на открытие попапа с изображением
+  _handleOpenPopup() {
+    popupImagePicture.setAttribute('src', this._link);
+    popupImagePicture.setAttribute('alt', this._name);
+    popupImageCaption.textContent = this._name;
+
+    openPopup(popupImage);
+  }
+
+  //Метод удаления карточки из DOM - почему-то не работает с ним
+  /*_removeCard(card) {
+    card.remove();
+    card = null;
+  };*/
+
   //метод обработчик на кнопку делит
-
-
+  _handleRemoveCard() {
+      this._api.deleteCard(this._id)
+        .then(
+          this._element.remove(),
+          this._element = null
+        )
+        .catch((err) => {
+          console.log(err);
+        });
+  };
 }
 
-
-
-//для проверки написать цикл для создания экземпляра класса кард, каждой карточке в индекс.джс
-
-/* пример из теории
-
-messageList.forEach((item) => {
-	const message = new Message(item, '.message-template_type_default');
-	const messageElement = message.generate();
-
-	document.body.append(messageElement);
-});
-
-*/
-
+//добавить константы
