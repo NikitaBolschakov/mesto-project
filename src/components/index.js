@@ -39,6 +39,9 @@ import { api } from "./api.js";
 
 import { renderLoading } from "./utils.js";
 
+//эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
+
+/*
 //Функция вызова запроса удаления карточки
 const callRequestDeleteCard = (cardId, element) => {
   api.deleteCard(cardId)
@@ -70,7 +73,9 @@ const callRequestDeleteLike = (cardId, element) => {
     .catch((err) => {
       console.log(err);
     });
-};
+};*/
+
+let user; //здесь будет храниться объект с данными о пользователе
 
 //Функция очистки формы
 const resetForm = (form) => {
@@ -91,7 +96,7 @@ const prependCard = (name, link) => {
   //отправить на сервер и добавить в DOM
   api.postCard(name, link)
     .then((data) => {
-      const newCard = new Card(data, api, '#card');
+      const newCard = new Card(data, user, api, '#card');
       const newCardElement = newCard.generate();
       cardContainer.prepend(newCardElement);
       closePopup(popupAdd);
@@ -212,12 +217,13 @@ enableValidation({
   errorClass: "popup__field-error_active",
 });
 
-// Связываю два промиса, получаю из getProfileData() "user._id" для createCard()
-Promise.all([api.getProfileData(), api.getCards()]) //Когда выполнятся два запроса
+
+Promise.all([api.getProfileData(), api.getCards()]) 
   .then(([profile, cards]) => {
-    let user = profile;
+    user = profile; //переопределили переменную user
     //"при положительном ответе": отдай массив из полученных значений
     renderProfileData(profile); //отредактируй данные профиля используя значение user
+    //создать для каждой карточки экземпляр класса
     cards.forEach((element) => {
       const newCard = new Card(element, user, api, '#card');
       const newCardElement = newCard.generate();
@@ -226,6 +232,5 @@ Promise.all([api.getProfileData(), api.getCards()]) //Когда выполня�
     });
   })
   .catch((err) => {
-    //"при отрицательном ответе": выведи ошибку в консоль
     console.log(err);
   });
