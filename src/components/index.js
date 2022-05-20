@@ -217,7 +217,6 @@ enableValidation({
   errorClass: "popup__field-error_active",
 });
 
-
 Promise.all([api.getProfileData(), api.getCards()]) 
   .then(([profile, cards]) => {
     user = profile; //переопределили переменную user
