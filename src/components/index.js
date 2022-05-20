@@ -31,24 +31,17 @@ import {
 
 import { openPopup, closePopup } from "./modal.js";
 
-import { createCard, addLike, removeLike, removeCard  } from "./card.js";
+import Card from "./card.js";
 
 import { disableSaveButton, enableValidation } from "./validate.js";
 
-import {
-  /*getProfileData,
-  getCards,
-  patchProfileData,
-  postCard,
-  patchAvatar,
-  deleteCard,
-  putLike,
-  deleteLike,*/
-  api
-} from "./api.js";
+import { api } from "./api.js";
 
 import { renderLoading } from "./utils.js";
 
+//эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
+
+/*
 //Функция вызова запроса удаления карточки
 const callRequestDeleteCard = (cardId, element) => {
   api.deleteCard(cardId)
@@ -80,7 +73,9 @@ const callRequestDeleteLike = (cardId, element) => {
     .catch((err) => {
       console.log(err);
     });
-};
+};*/
+
+let user; //здесь будет храниться объект с данными о пользователе
 
 //Функция очистки формы
 const resetForm = (form) => {
@@ -100,16 +95,10 @@ const renderProfileData = (data) => {
 const prependCard = (name, link) => {
   //отправить на сервер и добавить в DOM
   api.postCard(name, link)
-    .then((res) => {
-      cardContainer.prepend(
-        createCard(
-          res,
-          res.owner._id,
-          callRequestPutLike,
-          callRequestDeleteLike,
-          callRequestDeleteCard
-        )
-      );
+    .then((data) => {
+      const newCard = new Card(data, user, api, '#card');
+      const newCardElement = newCard.generate();
+      cardContainer.prepend(newCardElement);
       closePopup(popupAdd);
       resetForm(formCardElement);
       disableSaveButton(cardSaveButton);
@@ -228,18 +217,19 @@ enableValidation({
   errorClass: "popup__field-error_active",
 });
 
-// Связываю два промиса, получаю из getProfileData() "user._id" для createCard()
-Promise.all([api.getProfileData(), api.getCards()]) //Когда выполнятся два запроса
+Promise.all([api.getProfileData(), api.getCards()]) 
   .then(([profile, cards]) => {
+    user = profile; //переопределили переменную user
     //"при положительном ответе": отдай массив из полученных значений
     renderProfileData(profile); //отредактируй данные профиля используя значение user
-    cards.forEach((card) => {
+    //создать для каждой карточки экземпляр класса
+    cards.forEach((element) => {
+      const newCard = new Card(element, user, api, '#card');
+      const newCardElement = newCard.generate();
       //пройдись по полученному объекту, добавь в DOM каждую карточку
-      cardContainer.append(createCard(card, profile._id, callRequestPutLike,
-        callRequestDeleteLike, callRequestDeleteCard))
+      cardContainer.append(newCardElement)
     });
   })
   .catch((err) => {
-    //"при отрицательном ответе": выведи ошибку в консоль
     console.log(err);
   });
