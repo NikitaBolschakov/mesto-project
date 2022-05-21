@@ -33,7 +33,7 @@ import { openPopup, closePopup } from "./modal.js";
 
 import Card from "./card.js";
 
-import { disableSaveButton, enableValidation } from "./validate.js";
+import FormValidator from "./validate.js";
 
 import { api } from "./api.js";
 
@@ -101,7 +101,7 @@ const prependCard = (name, link) => {
       cardContainer.prepend(newCardElement);
       closePopup(popupAdd);
       resetForm(formCardElement);
-      disableSaveButton(cardSaveButton);
+      addCardValidation.disableSaveButton(cardSaveButton);
     })
     .catch((err) => {
       console.log(err);
@@ -121,7 +121,7 @@ const createNewAvatar = () => {
       avatarElement.style.backgroundImage = `url(${inputValue})`;
       closePopup(popupUpdate);
       resetForm(avatarForm);
-      disableSaveButton(avatarSaveButton);
+      addCardValidation.disableSaveButton(avatarSaveButton);
     })
     .catch((err) => {
       console.log(err);
@@ -207,15 +207,37 @@ closeButtonPopupUpdate.addEventListener("click", () => {
 //Обработчик отправки формы редактирования профиля
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 
-// Включить валидацию форм
-enableValidation({
+// Включить валидацию всех трех форм
+const profileValidation = new FormValidator({
   formSelector: ".popup__form",
   inputSelector: ".popup__field",
   submitButtonSelector: ".popup__button-submit",
   inactiveButtonClass: "popup__button-submit_inactive",
   inputErrorClass: "popup__field_type_error",
   errorClass: "popup__field-error_active",
-});
+}, profileForm);
+
+const avatarUpdateValidation = new FormValidator({
+  formSelector: ".popup__form",
+  inputSelector: ".popup__field",
+  submitButtonSelector: ".popup__button-submit",
+  inactiveButtonClass: "popup__button-submit_inactive",
+  inputErrorClass: "popup__field_type_error",
+  errorClass: "popup__field-error_active",
+}, avatarForm);
+
+const addCardValidation = new FormValidator({
+  formSelector: ".popup__form",
+  inputSelector: ".popup__field",
+  submitButtonSelector: ".popup__button-submit",
+  inactiveButtonClass: "popup__button-submit_inactive",
+  inputErrorClass: "popup__field_type_error",
+  errorClass: "popup__field-error_active",
+}, formCardElement);
+
+profileValidation.enableValidation();
+addCardValidation.enableValidation();
+avatarUpdateValidation.enableValidation();
 
 Promise.all([api.getProfileData(), api.getCards()]) 
   .then(([profile, cards]) => {
