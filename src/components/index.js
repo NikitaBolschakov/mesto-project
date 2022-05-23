@@ -39,43 +39,22 @@ import { api } from "./api.js";
 
 import { renderLoading } from "./utils.js";
 
-//эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
+import Section from "./Section.js";
 
-/*
-//Функция вызова запроса удаления карточки
-const callRequestDeleteCard = (cardId, element) => {
-  api.deleteCard(cardId)
-    .then(
-      removeCard(element)
-    )
-    .catch((err) => {
-      console.log(err);
-    });
-};
+//Здесь будет храниться объект с данными о пользователе
+let user; 
+let objCards;
 
-//Функция вызова запроса постановки лайка
-const callRequestPutLike = (cardId, element) => {
-  api.putLike(cardId)
-    .then((res) => {
-      addLike(res, element)
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+const cardList = new Section({data: objCards,
+  renderer: (item) => {
+    const card = new Card(item, user, api, '#card');
+    const cardElement = card.generate();
+    
+    return cardElement; //(4) возвращается готовая карточка
+  }},
+  ".gallery"
+)
 
-//Функция вызова запроса удаления лайка
-const callRequestDeleteLike = (cardId, element) => {
-  api.deleteLike(cardId)
-    .then((res) => {
-      removeLike(res, element)
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};*/
-
-let user; //здесь будет храниться объект с данными о пользователе
 
 //Функция очистки формы
 const resetForm = (form) => {
@@ -96,9 +75,10 @@ const prependCard = (name, link) => {
   //отправить на сервер и добавить в DOM
   api.postCard(name, link)
     .then((data) => {
-      const newCard = new Card(data, user, api, '#card');
-      const newCardElement = newCard.generate();
-      cardContainer.prepend(newCardElement);
+      //const newCard = new Card(data, user, api, '#card');
+      //const newCardElement = newCard.generate();
+      //cardContainer.prepend(newCardElement);
+      cardList.setItem(data);
       closePopup(popupAdd);
       resetForm(formCardElement);
       disableSaveButton(cardSaveButton);
@@ -221,16 +201,64 @@ enableValidation({
 Promise.all([api.getProfileData(), api.getCards()]) 
   .then(([profile, cards]) => {
     user = profile; //переопределили переменную user
+    objCards = cards;
     //"при положительном ответе": отдай массив из полученных значений
     renderProfileData(profile); //отредактируй данные профиля используя значение user
+    cardList.renderItems(cards); //(1) добавляем карточки в созданный контейнер (классом Section)
+
     //создать для каждой карточки экземпляр класса
-    cards.forEach((element) => {
+    /*cards.forEach((element) => {
       const newCard = new Card(element, user, api, '#card');
       const newCardElement = newCard.generate();
       //пройдись по полученному объекту, добавь в DOM каждую карточку
-      cardContainer.append(newCardElement)
-    });
+      /*cardContainer.append(newCardElement)*/
+      //cardList.renderItems(cards)
+    //});
   })
   .catch((err) => {
     console.log(err);
   });
+
+
+
+
+
+
+
+
+
+  //эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
+
+/*
+//Функция вызова запроса удаления карточки
+const callRequestDeleteCard = (cardId, element) => {
+  api.deleteCard(cardId)
+    .then(
+      removeCard(element)
+    )
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+//Функция вызова запроса постановки лайка
+const callRequestPutLike = (cardId, element) => {
+  api.putLike(cardId)
+    .then((res) => {
+      addLike(res, element)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+//Функция вызова запроса удаления лайка
+const callRequestDeleteLike = (cardId, element) => {
+  api.deleteLike(cardId)
+    .then((res) => {
+      removeLike(res, element)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};*/
