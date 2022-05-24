@@ -1,8 +1,6 @@
 import "../pages/index.css";
 
 import {
-  nameElement,
-  jobElement,
   profileForm,
   nameInput,
   jobInput,
@@ -25,8 +23,7 @@ import {
   editSaveButton,
   cardSaveButton,
   avatarSaveButton,
-  avatarInput,
-  avatarElement,
+  avatarInput
 } from "./constants.js";
 
 import { openPopup, closePopup } from "./modal.js";
@@ -42,7 +39,6 @@ import { renderLoading } from "./utils.js";
 import UserInfo from "./UserInfo.js";
 
 //эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
-
 /*
 //Функция вызова запроса удаления карточки
 const callRequestDeleteCard = (cardId, element) => {
@@ -80,10 +76,11 @@ const callRequestDeleteLike = (cardId, element) => {
 let user; //здесь будет храниться объект с данными о пользователе
 
 const userInfo = new UserInfo({
-  //Селекторы полей пользователя
-  name: '.profile__name',
-  status: '.profile__status',
-  avatar: '.profile__avatar'
+  nameElement: '.profile__name',
+  statusElement: '.profile__status',
+  avatarElement: '.profile__avatar',
+  nameField: '#field-name',
+  statusField: '#field-job'
 });
 
 //Функция очистки формы
@@ -91,7 +88,7 @@ const resetForm = (form) => {
   form.reset();
 };
 
-/*Теперь это делает класс UserInfo
+/*Теперь это делает класс UserInfo.setUserInfo()
 
 // Использование полученных данных о пользователе
 const renderProfileData = (data) => {
@@ -128,10 +125,8 @@ const createNewAvatar = () => {
   //загрузил аватар на сервер
   api.patchAvatar(inputValue)
     .then((res) => {
-      //renderProfileData(res);
-
-      userInfo.setUserInfo(res);//принимает новые данные пользователя и отправляет их на страницу
-
+      //renderProfileData(res);  //теперь это делает UserInfo.setUserInfo
+      userInfo.setUserInfo(res); //принимает новые данные пользователя и отправляет их на страницу
       closePopup(popupUpdate);
       resetForm(avatarForm);
       addCardValidation.disableSaveButton(avatarSaveButton);
@@ -153,12 +148,8 @@ const handleProfileFormSubmit = (evt) => {
   //Отправляю на сервер новые данные
   api.patchProfileData(nameValue, jobValue)
     .then((res) => {
-      //renderProfileData(res);
-
+      //renderProfileData(res); //теперь это делает UserInfo.setUserInfo
       userInfo.setUserInfo(res);
-
-      nameElement.textContent = nameValue;
-      jobElement.textContent = jobValue;
       closePopup(popupEdit);
     })
     .catch((err) => {
@@ -258,9 +249,7 @@ avatarUpdateValidation.enableValidation();
 Promise.all([api.getProfileData(), api.getCards()]) 
   .then(([profile, cards]) => {
     user = profile; //переопределили переменную user
-    
-    //renderProfileData(profile); //отредактируй данные профиля
-
+    //renderProfileData(profile); //теперь это делает UserInfo.setUserInfo
     userInfo.setUserInfo(profile);  //принимает новые даннные пользователя и отправляет их на страницу
 
     //создать для каждой карточки экземпляр класса

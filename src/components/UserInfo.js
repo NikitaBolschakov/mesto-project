@@ -1,28 +1,29 @@
 export default class UserInfo {
-  constructor({ name, status, avatar }) {
-    //принимает три селектора
-    this._nameInput = document.querySelector(name);
-    this._statusInput = document.querySelector(status);
-    this._avatarInput = document.querySelector(avatar);
+  constructor({ nameElement, statusElement, avatarElement, nameField, statusField }) {
+    //принимает селекторы
+    this._nameElement = document.querySelector(nameElement);
+    this._statusElement = document.querySelector(statusElement);
+    this._avatarElement = document.querySelector(avatarElement);
+    this._nameField = document.querySelector(nameField);
+    this._statusField = document.querySelector(statusField);
   }
 
   getUserInfo() {
     //возвращает объект с данными пользователя
     return {
-      name: this._nameInput.textContent,
-      status: this._statusInput.textContent,
-      avatar: this._avatarInput.style.backgroundImage,
+      name: this._nameElement.textContent,
+      status: this._statusElement.textContent,
+      avatar: this._avatarElement.style.backgroundImage,
     };
   }
 
   setUserInfo(data) {
     //принимает новые даннные пользователя и отправляет их на страницу
-    this._nameInput.textContent = data.name;
-    this._statusInput.textContent = data.about;
-    this._avatarInput.style.backgroundImage = `url(${data.avatar})`;
-
-    this._nameInput.value = data.name;
-    this._statusInput.value = data.about;
+    this._nameElement.textContent = data.name;
+    this._statusElement.textContent = data.about;
+    this._avatarElement.style.backgroundImage = `url(${data.avatar})`;
+    this._nameField.value = data.name;
+    this._statusField.value = data.about;
   }
 }
 
