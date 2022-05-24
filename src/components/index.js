@@ -39,6 +39,8 @@ import { api } from "./api.js";
 
 import { renderLoading } from "./utils.js";
 
+import UserInfo from "./UserInfo.js";
+
 //эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
 
 /*
@@ -77,10 +79,19 @@ const callRequestDeleteLike = (cardId, element) => {
 
 let user; //здесь будет храниться объект с данными о пользователе
 
+const userInfo = new UserInfo({
+  //Селекторы полей пользователя
+  name: '.profile__name',
+  status: '.profile__status',
+  avatar: '.profile__avatar'
+});
+
 //Функция очистки формы
 const resetForm = (form) => {
   form.reset();
 };
+
+/*Теперь это делает класс UserInfo
 
 // Использование полученных данных о пользователе
 const renderProfileData = (data) => {
@@ -89,7 +100,7 @@ const renderProfileData = (data) => {
   nameInput.value = data.name;
   jobInput.value = data.about;
   avatarElement.style.backgroundImage = `url(${data.avatar})`;
-};
+};*/
 
 //Функция создания новой карточки
 const prependCard = (name, link) => {
@@ -117,8 +128,10 @@ const createNewAvatar = () => {
   //загрузил аватар на сервер
   api.patchAvatar(inputValue)
     .then((res) => {
-      renderProfileData(res);
-      avatarElement.style.backgroundImage = `url(${inputValue})`;
+      //renderProfileData(res);
+
+      userInfo.setUserInfo(res);//принимает новые данные пользователя и отправляет их на страницу
+
       closePopup(popupUpdate);
       resetForm(avatarForm);
       addCardValidation.disableSaveButton(avatarSaveButton);
@@ -140,7 +153,10 @@ const handleProfileFormSubmit = (evt) => {
   //Отправляю на сервер новые данные
   api.patchProfileData(nameValue, jobValue)
     .then((res) => {
-      renderProfileData(res);
+      //renderProfileData(res);
+
+      userInfo.setUserInfo(res);
+
       nameElement.textContent = nameValue;
       jobElement.textContent = jobValue;
       closePopup(popupEdit);
@@ -242,8 +258,11 @@ avatarUpdateValidation.enableValidation();
 Promise.all([api.getProfileData(), api.getCards()]) 
   .then(([profile, cards]) => {
     user = profile; //переопределили переменную user
-    //"при положительном ответе": отдай массив из полученных значений
-    renderProfileData(profile); //отредактируй данные профиля используя значение user
+    
+    //renderProfileData(profile); //отредактируй данные профиля
+
+    userInfo.setUserInfo(profile);  //принимает новые даннные пользователя и отправляет их на страницу
+
     //создать для каждой карточки экземпляр класса
     cards.forEach((element) => {
       const newCard = new Card(element, user, api, '#card');
