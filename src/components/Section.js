@@ -1,4 +1,4 @@
-export default class Section {
+    export default class Section {
     //Как подставить data? через переопределение let objCards, выдает undefined
     constructor ({data, renderer}, selector) {  //принимает объект и колбек-инструкцию, + селектор контейнера
         this._renderedItems = data;             //массив карточек

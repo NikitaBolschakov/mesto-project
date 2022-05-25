@@ -43,8 +43,8 @@ import Section from "./Section.js";
 
 //Здесь будет храниться объект с данными о пользователе
 let user; 
-let objCards;
-console.log(objCards)
+//let cards;
+
 
 /*
 Схема работы класса Section:
@@ -60,15 +60,8 @@ console.log(objCards)
 
 
 //При инициализации класса передается объект карточек, полученный от api и функция для отрисовки каждой карточки
-const cardList = new Section({data: objCards,
-  renderer: (item) => {
-    const card = new Card(item, user, api, '#card');
-    const cardElement = card.generate();
 
-    cardList.addItem(cardElement); //карточка добавляется в контейнер
-  }},
-  ".gallery"
-)
+
 
 
 //Функция очистки формы
@@ -91,12 +84,10 @@ const prependCard = (name, link) => {
   api.postCard(name, link)
     .then((data) => {
 
-      //Это теперь делает renderer
-      //const newCard = new Card(data, user, api, '#card');
-      //const newCardElement = newCard.generate();
-      //cardContainer.prepend(newCardElement);
-
-      cardList.addItem(data);  //получает элемент и добавляет в разметку
+      const newCard = new Card(data, user, api, '#card');
+      const newCardElement = newCard.generate();
+      cardContainer.prepend(newCardElement);
+      
       closePopup(popupAdd);
       resetForm(formCardElement);
       disableSaveButton(cardSaveButton);
@@ -219,9 +210,20 @@ enableValidation({
 Promise.all([api.getProfileData(), api.getCards()]) 
   .then(([profile, cards]) => {
     user = profile; //переопределили переменную user
-    objCards = cards;
+    
+    const cardList = new Section({data: cards,
+      renderer: (item) => {
+        const card = new Card(item, user, api, '#card');
+        const cardElement = card.generate();
+    
+        cardList.addItem(cardElement); //карточка добавляется в контейнер
+      }},
+      ".gallery"
+    )
+
     //"при положительном ответе": отдай массив из полученных значений
     renderProfileData(profile); //отредактируй данные профиля используя значение user
+
     cardList.renderItems(cards); // добавляем карточки в созданный контейнер (классом Section)
     
     // Это теперь делает класс Section
