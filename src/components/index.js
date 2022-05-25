@@ -1,8 +1,6 @@
 import "../pages/index.css";
 
 import {
-  nameElement,
-  jobElement,
   profileForm,
   nameInput,
   jobInput,
@@ -25,27 +23,31 @@ import {
   editSaveButton,
   cardSaveButton,
   avatarSaveButton,
-  avatarInput,
-  avatarElement,
+  avatarInput
 } from "./constants.js";
 
 import { openPopup, closePopup } from "./modal.js";
 
 import Card from "./card.js";
 
-import { disableSaveButton, enableValidation } from "./validate.js";
+import FormValidator from "./validate.js";
 
 import { api } from "./api.js";
 
 import { renderLoading } from "./utils.js";
 
+<<<<<<< HEAD
 import Section from "./Section.js";
 
 //Здесь будет храниться объект с данными о пользователе
 let user; 
 //let cards;
 
+=======
+import UserInfo from "./UserInfo.js";
+>>>>>>> 3dfcb22307dd3cdfdf21c4961119e650ae78a768
 
+//эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
 /*
 Схема работы класса Section:
 1) Из api получаем массив карточек (в конце файла)
@@ -64,10 +66,20 @@ let user;
 
 
 
+const userInfo = new UserInfo({
+  nameElement: '.profile__name',
+  statusElement: '.profile__status',
+  avatarElement: '.profile__avatar',
+  nameField: '#field-name',
+  statusField: '#field-job'
+});
+
 //Функция очистки формы
 const resetForm = (form) => {
   form.reset();
 };
+
+/*Теперь это делает класс UserInfo.setUserInfo()
 
 // Использование полученных данных о пользователе
 const renderProfileData = (data) => {
@@ -76,7 +88,7 @@ const renderProfileData = (data) => {
   nameInput.value = data.name;
   jobInput.value = data.about;
   avatarElement.style.backgroundImage = `url(${data.avatar})`;
-};
+};*/
 
 //Функция создания новой карточки
 const prependCard = (name, link) => {
@@ -90,7 +102,7 @@ const prependCard = (name, link) => {
       
       closePopup(popupAdd);
       resetForm(formCardElement);
-      disableSaveButton(cardSaveButton);
+      addCardValidation.disableSaveButton(cardSaveButton);
     })
     .catch((err) => {
       console.log(err);
@@ -106,11 +118,11 @@ const createNewAvatar = () => {
   //загрузил аватар на сервер
   api.patchAvatar(inputValue)
     .then((res) => {
-      renderProfileData(res);
-      avatarElement.style.backgroundImage = `url(${inputValue})`;
+      //renderProfileData(res);  //теперь это делает UserInfo.setUserInfo
+      userInfo.setUserInfo(res); //принимает новые данные пользователя и отправляет их на страницу
       closePopup(popupUpdate);
       resetForm(avatarForm);
-      disableSaveButton(avatarSaveButton);
+      addCardValidation.disableSaveButton(avatarSaveButton);
     })
     .catch((err) => {
       console.log(err);
@@ -129,9 +141,8 @@ const handleProfileFormSubmit = (evt) => {
   //Отправляю на сервер новые данные
   api.patchProfileData(nameValue, jobValue)
     .then((res) => {
-      renderProfileData(res);
-      nameElement.textContent = nameValue;
-      jobElement.textContent = jobValue;
+      //renderProfileData(res); //теперь это делает UserInfo.setUserInfo
+      userInfo.setUserInfo(res);
       closePopup(popupEdit);
     })
     .catch((err) => {
@@ -196,20 +207,42 @@ closeButtonPopupUpdate.addEventListener("click", () => {
 //Обработчик отправки формы редактирования профиля
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 
-// Включить валидацию форм
-enableValidation({
+// Включить валидацию всех трех форм
+const profileValidation = new FormValidator({
   formSelector: ".popup__form",
   inputSelector: ".popup__field",
   submitButtonSelector: ".popup__button-submit",
   inactiveButtonClass: "popup__button-submit_inactive",
   inputErrorClass: "popup__field_type_error",
   errorClass: "popup__field-error_active",
-});
+}, profileForm);
 
+const avatarUpdateValidation = new FormValidator({
+  formSelector: ".popup__form",
+  inputSelector: ".popup__field",
+  submitButtonSelector: ".popup__button-submit",
+  inactiveButtonClass: "popup__button-submit_inactive",
+  inputErrorClass: "popup__field_type_error",
+  errorClass: "popup__field-error_active",
+}, avatarForm);
+
+const addCardValidation = new FormValidator({
+  formSelector: ".popup__form",
+  inputSelector: ".popup__field",
+  submitButtonSelector: ".popup__button-submit",
+  inactiveButtonClass: "popup__button-submit_inactive",
+  inputErrorClass: "popup__field_type_error",
+  errorClass: "popup__field-error_active",
+}, formCardElement);
+
+profileValidation.enableValidation();
+addCardValidation.enableValidation();
+avatarUpdateValidation.enableValidation();
 
 Promise.all([api.getProfileData(), api.getCards()]) 
   .then(([profile, cards]) => {
     user = profile; //переопределили переменную user
+<<<<<<< HEAD
     
     const cardList = new Section({data: cards,
       renderer: (item) => {
@@ -227,6 +260,11 @@ Promise.all([api.getProfileData(), api.getCards()])
     cardList.renderItems(cards); // добавляем карточки в созданный контейнер (классом Section)
     
     // Это теперь делает класс Section
+=======
+    //renderProfileData(profile); //теперь это делает UserInfo.setUserInfo
+    userInfo.setUserInfo(profile);  //принимает новые даннные пользователя и отправляет их на страницу
+
+>>>>>>> 3dfcb22307dd3cdfdf21c4961119e650ae78a768
     //создать для каждой карточки экземпляр класса
     /*cards.forEach((element) => {
       const newCard = new Card(element, user, api, '#card');
