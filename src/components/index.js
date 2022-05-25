@@ -44,13 +44,28 @@ import Section from "./Section.js";
 //Здесь будет храниться объект с данными о пользователе
 let user; 
 let objCards;
+console.log(objCards)
 
+/*
+Схема работы класса Section:
+1) Из api получаем массив карточек (в конце файла)
+2) Передаем массив в метод renderItems()
+3) В нем проходим по каждой карточке и выполняем инструкцию renderer, она описана в index
+4) Колбек renderer создает экземпляр класса Card, генерирует карточку и передает ее методу addItem()
+5) Метод addItem() добавляет ее в разметку
+
+Задача: подставить массив с карточками при создании new Section,
+пока через переопределение let objCards, не получается - Дебаггер пишет: _renderedItems: undefined
+*/
+
+
+//При инициализации класса передается объект карточек, полученный от api и функция для отрисовки каждой карточки
 const cardList = new Section({data: objCards,
   renderer: (item) => {
     const card = new Card(item, user, api, '#card');
     const cardElement = card.generate();
-    
-    return cardElement; //(4) возвращается готовая карточка
+
+    cardList.addItem(cardElement); //карточка добавляется в контейнер
   }},
   ".gallery"
 )
@@ -75,10 +90,13 @@ const prependCard = (name, link) => {
   //отправить на сервер и добавить в DOM
   api.postCard(name, link)
     .then((data) => {
+
+      //Это теперь делает renderer
       //const newCard = new Card(data, user, api, '#card');
       //const newCardElement = newCard.generate();
       //cardContainer.prepend(newCardElement);
-      cardList.setItem(data);
+
+      cardList.addItem(data);  //получает элемент и добавляет в разметку
       closePopup(popupAdd);
       resetForm(formCardElement);
       disableSaveButton(cardSaveButton);
@@ -204,16 +222,18 @@ Promise.all([api.getProfileData(), api.getCards()])
     objCards = cards;
     //"при положительном ответе": отдай массив из полученных значений
     renderProfileData(profile); //отредактируй данные профиля используя значение user
-    cardList.renderItems(cards); //(1) добавляем карточки в созданный контейнер (классом Section)
-
+    cardList.renderItems(cards); // добавляем карточки в созданный контейнер (классом Section)
+    
+    // Это теперь делает класс Section
     //создать для каждой карточки экземпляр класса
     /*cards.forEach((element) => {
       const newCard = new Card(element, user, api, '#card');
       const newCardElement = newCard.generate();
       //пройдись по полученному объекту, добавь в DOM каждую карточку
-      /*cardContainer.append(newCardElement)*/
-      //cardList.renderItems(cards)
-    //});
+      //cardContainer.append(newCardElement)
+      //// или cardList.addItem(newCardElement);
+    });*/
+    
   })
   .catch((err) => {
     console.log(err);

@@ -1,18 +1,18 @@
 export default class Section {
+    //Как подставить data? через переопределение let objCards, выдает undefined
     constructor ({data, renderer}, selector) {  //принимает объект и колбек-инструкцию, + селектор контейнера
         this._renderedItems = data;             //массив карточек
+        this._renderer = renderer;                    //инструкция в index.js, отвечает за отрисовку отдельного элемента
         this._container = document.querySelector(selector);  //контейнер, в котором все отрисуем
-        this._renderer = renderer;                           //инструкция в index.js
     }
 
-    setItem(item) {                        
-        const card = this._renderer(item); //(3) каждый элемент объекта проходит инструкцию renderer
-        this._container.append(card);      //(5) и добавляется в контейнер
+    //отвечает за отрисовку всех элементов
+    renderItems() {                         
+        this._renderedItems.forEach(item => this._renderer(item));
     }
 
-    renderItems() {
-        this._renderedItems.forEach(item => {
-            this.setItem(item)               //(2) пройтись по каждому элементу объекта и для каждого запустить setItem
-        });
+    //принимает DOM элемент и добавляет его в контейнер
+    addItem(item) {                        
+        this._container.append(item);
     }
 }
