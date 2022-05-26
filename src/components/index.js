@@ -1,8 +1,6 @@
 import "../pages/index.css";
 
 import {
-  nameElement,
-  jobElement,
   profileForm,
   nameInput,
   jobInput,
@@ -25,8 +23,7 @@ import {
   editSaveButton,
   cardSaveButton,
   avatarSaveButton,
-  avatarInput,
-  avatarElement,
+  avatarInput
 } from "./constants.js";
 
 import { openPopup, closePopup } from "./modal.js";
@@ -39,48 +36,50 @@ import { api } from "./api.js";
 
 import { renderLoading } from "./utils.js";
 
+<<<<<<< HEAD
+import Section from "./Section.js";
+
+//Здесь будет храниться объект с данными о пользователе
+let user; 
+//let cards;
+
+=======
+import UserInfo from "./UserInfo.js";
+>>>>>>> 3dfcb22307dd3cdfdf21c4961119e650ae78a768
+
 //эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
-
 /*
-//Функция вызова запроса удаления карточки
-const callRequestDeleteCard = (cardId, element) => {
-  api.deleteCard(cardId)
-    .then(
-      removeCard(element)
-    )
-    .catch((err) => {
-      console.log(err);
-    });
-};
+Схема работы класса Section:
+1) Из api получаем массив карточек (в конце файла)
+2) Передаем массив в метод renderItems()
+3) В нем проходим по каждой карточке и выполняем инструкцию renderer, она описана в index
+4) Колбек renderer создает экземпляр класса Card, генерирует карточку и передает ее методу addItem()
+5) Метод addItem() добавляет ее в разметку
 
-//Функция вызова запроса постановки лайка
-const callRequestPutLike = (cardId, element) => {
-  api.putLike(cardId)
-    .then((res) => {
-      addLike(res, element)
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+Задача: подставить массив с карточками при создании new Section,
+пока через переопределение let objCards, не получается - Дебаггер пишет: _renderedItems: undefined
+*/
 
-//Функция вызова запроса удаления лайка
-const callRequestDeleteLike = (cardId, element) => {
-  api.deleteLike(cardId)
-    .then((res) => {
-      removeLike(res, element)
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};*/
 
-let user; //здесь будет храниться объект с данными о пользователе
+//При инициализации класса передается объект карточек, полученный от api и функция для отрисовки каждой карточки
+
+
+
+
+const userInfo = new UserInfo({
+  nameElement: '.profile__name',
+  statusElement: '.profile__status',
+  avatarElement: '.profile__avatar',
+  nameField: '#field-name',
+  statusField: '#field-job'
+});
 
 //Функция очистки формы
 const resetForm = (form) => {
   form.reset();
 };
+
+/*Теперь это делает класс UserInfo.setUserInfo()
 
 // Использование полученных данных о пользователе
 const renderProfileData = (data) => {
@@ -89,16 +88,18 @@ const renderProfileData = (data) => {
   nameInput.value = data.name;
   jobInput.value = data.about;
   avatarElement.style.backgroundImage = `url(${data.avatar})`;
-};
+};*/
 
 //Функция создания новой карточки
 const prependCard = (name, link) => {
   //отправить на сервер и добавить в DOM
   api.postCard(name, link)
     .then((data) => {
+
       const newCard = new Card(data, user, api, '#card');
       const newCardElement = newCard.generate();
       cardContainer.prepend(newCardElement);
+      
       closePopup(popupAdd);
       resetForm(formCardElement);
       addCardValidation.disableSaveButton(cardSaveButton);
@@ -117,8 +118,8 @@ const createNewAvatar = () => {
   //загрузил аватар на сервер
   api.patchAvatar(inputValue)
     .then((res) => {
-      renderProfileData(res);
-      avatarElement.style.backgroundImage = `url(${inputValue})`;
+      //renderProfileData(res);  //теперь это делает UserInfo.setUserInfo
+      userInfo.setUserInfo(res); //принимает новые данные пользователя и отправляет их на страницу
       closePopup(popupUpdate);
       resetForm(avatarForm);
       addCardValidation.disableSaveButton(avatarSaveButton);
@@ -140,9 +141,8 @@ const handleProfileFormSubmit = (evt) => {
   //Отправляю на сервер новые данные
   api.patchProfileData(nameValue, jobValue)
     .then((res) => {
-      renderProfileData(res);
-      nameElement.textContent = nameValue;
-      jobElement.textContent = jobValue;
+      //renderProfileData(res); //теперь это делает UserInfo.setUserInfo
+      userInfo.setUserInfo(res);
       closePopup(popupEdit);
     })
     .catch((err) => {
@@ -242,16 +242,83 @@ avatarUpdateValidation.enableValidation();
 Promise.all([api.getProfileData(), api.getCards()]) 
   .then(([profile, cards]) => {
     user = profile; //переопределили переменную user
+<<<<<<< HEAD
+    
+    const cardList = new Section({data: cards,
+      renderer: (item) => {
+        const card = new Card(item, user, api, '#card');
+        const cardElement = card.generate();
+    
+        cardList.addItem(cardElement); //карточка добавляется в контейнер
+      }},
+      ".gallery"
+    )
+
     //"при положительном ответе": отдай массив из полученных значений
     renderProfileData(profile); //отредактируй данные профиля используя значение user
+
+    cardList.renderItems(cards); // добавляем карточки в созданный контейнер (классом Section)
+    
+    // Это теперь делает класс Section
+=======
+    //renderProfileData(profile); //теперь это делает UserInfo.setUserInfo
+    userInfo.setUserInfo(profile);  //принимает новые даннные пользователя и отправляет их на страницу
+
+>>>>>>> 3dfcb22307dd3cdfdf21c4961119e650ae78a768
     //создать для каждой карточки экземпляр класса
-    cards.forEach((element) => {
+    /*cards.forEach((element) => {
       const newCard = new Card(element, user, api, '#card');
       const newCardElement = newCard.generate();
       //пройдись по полученному объекту, добавь в DOM каждую карточку
-      cardContainer.append(newCardElement)
-    });
+      //cardContainer.append(newCardElement)
+      //// или cardList.addItem(newCardElement);
+    });*/
+    
   })
   .catch((err) => {
     console.log(err);
   });
+
+
+
+
+
+
+
+
+
+  //эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
+
+/*
+//Функция вызова запроса удаления карточки
+const callRequestDeleteCard = (cardId, element) => {
+  api.deleteCard(cardId)
+    .then(
+      removeCard(element)
+    )
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+//Функция вызова запроса постановки лайка
+const callRequestPutLike = (cardId, element) => {
+  api.putLike(cardId)
+    .then((res) => {
+      addLike(res, element)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+//Функция вызова запроса удаления лайка
+const callRequestDeleteLike = (cardId, element) => {
+  api.deleteLike(cardId)
+    .then((res) => {
+      removeLike(res, element)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};*/
