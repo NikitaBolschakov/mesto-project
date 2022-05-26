@@ -26,7 +26,7 @@ import {
   avatarInput
 } from "./constants.js";
 
-import { openPopup, closePopup } from "./modal.js";
+//import { openPopup, closePopup } from "./modal.js";
 
 import Card from "./card.js";
 
@@ -36,16 +36,15 @@ import { api } from "./api.js";
 
 import { renderLoading } from "./utils.js";
 
-<<<<<<< HEAD
 import Section from "./Section.js";
+
+import UserInfo from "./UserInfo.js";
+
+import Popup from "./Popup.js";
 
 //Здесь будет храниться объект с данными о пользователе
 let user; 
-//let cards;
 
-=======
-import UserInfo from "./UserInfo.js";
->>>>>>> 3dfcb22307dd3cdfdf21c4961119e650ae78a768
 
 //эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
 /*
@@ -59,12 +58,6 @@ import UserInfo from "./UserInfo.js";
 Задача: подставить массив с карточками при создании new Section,
 пока через переопределение let objCards, не получается - Дебаггер пишет: _renderedItems: undefined
 */
-
-
-//При инициализации класса передается объект карточек, полученный от api и функция для отрисовки каждой карточки
-
-
-
 
 const userInfo = new UserInfo({
   nameElement: '.profile__name',
@@ -118,7 +111,6 @@ const createNewAvatar = () => {
   //загрузил аватар на сервер
   api.patchAvatar(inputValue)
     .then((res) => {
-      //renderProfileData(res);  //теперь это делает UserInfo.setUserInfo
       userInfo.setUserInfo(res); //принимает новые данные пользователя и отправляет их на страницу
       closePopup(popupUpdate);
       resetForm(avatarForm);
@@ -141,7 +133,6 @@ const handleProfileFormSubmit = (evt) => {
   //Отправляю на сервер новые данные
   api.patchProfileData(nameValue, jobValue)
     .then((res) => {
-      //renderProfileData(res); //теперь это делает UserInfo.setUserInfo
       userInfo.setUserInfo(res);
       closePopup(popupEdit);
     })
@@ -168,27 +159,41 @@ avatarForm.addEventListener("submit", (evt) => {
   createNewAvatar();
 });
 
+//---------------------------------- попап редактирования профиля --------------------------------
+
+const popupEditor = new Popup(popupEdit);  
 //Открыть pop-up "Редактирование профиля"
 editButton.addEventListener("click", () => {
-  openPopup(popupEdit);
+  //openPopup(popupEdit); 
+  popupEditor.open(); 
 });
 
+
+popupEditor.setEventListeners(closeButtonPopupEdit);
 //Закрыть pop-up "Редактирование профиля"
-closeButtonPopupEdit.addEventListener("click", () => {
-  closePopup(popupEdit);
-});
+/*closeButtonPopupEdit.addEventListener("click", () => {
+  //closePopup(popupEdit); 
+});*/
 
+//------------------------------------- попап добавления карточки ---------------------------------
+
+const popupAddCard = new Popup(popupAdd); 
 //Открыть pop-up "Добавить карточку"
 addButton.addEventListener("click", () => {
-  openPopup(popupAdd);
+  //openPopup(popupAdd);
+  popupAddCard.open();
 });
 
-//Закрыть pop-up "Добавить карточку"
+popupAddCard.setEventListeners(closeButtonPopupAdd);
+/*//Закрыть pop-up "Добавить карточку"
 closeButtonPopupAdd.addEventListener("click", () => {
   closePopup(popupAdd);
-});
+});*/
 
-//Открытие папапа есть в цикле обработчика массива
+//-------------------------------------- остальные пока не трогал ----------------------
+
+
+//Открытие пoпапа есть в цикле обработчика массива
 //Закрыть попап с изображением
 closeButtonPopupImage.addEventListener("click", () => {
   closePopup(popupImage);
@@ -242,8 +247,7 @@ avatarUpdateValidation.enableValidation();
 Promise.all([api.getProfileData(), api.getCards()]) 
   .then(([profile, cards]) => {
     user = profile; //переопределили переменную user
-<<<<<<< HEAD
-    
+
     const cardList = new Section({data: cards,
       renderer: (item) => {
         const card = new Card(item, user, api, '#card');
@@ -254,33 +258,15 @@ Promise.all([api.getProfileData(), api.getCards()])
       ".gallery"
     )
 
-    //"при положительном ответе": отдай массив из полученных значений
-    renderProfileData(profile); //отредактируй данные профиля используя значение user
-
     cardList.renderItems(cards); // добавляем карточки в созданный контейнер (классом Section)
-    
-    // Это теперь делает класс Section
-=======
-    //renderProfileData(profile); //теперь это делает UserInfo.setUserInfo
     userInfo.setUserInfo(profile);  //принимает новые даннные пользователя и отправляет их на страницу
-
->>>>>>> 3dfcb22307dd3cdfdf21c4961119e650ae78a768
-    //создать для каждой карточки экземпляр класса
-    /*cards.forEach((element) => {
-      const newCard = new Card(element, user, api, '#card');
-      const newCardElement = newCard.generate();
-      //пройдись по полученному объекту, добавь в DOM каждую карточку
-      //cardContainer.append(newCardElement)
-      //// или cardList.addItem(newCardElement);
-    });*/
-    
   })
   .catch((err) => {
     console.log(err);
   });
 
-
-
+ 
+ 
 
 
 
