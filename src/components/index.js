@@ -175,7 +175,7 @@ editButton.addEventListener("click", () => {
 
 //Закрыть pop-up "Редактирование профиля"
 closeButtonPopupEdit.addEventListener("click", () => {
-  closePopup(popupEdit);
+  (popupEdit);
 });
 
 //Открыть pop-up "Добавить карточку"
