@@ -1,5 +1,4 @@
 import "../pages/index.css";
-
 import {
   profileForm,
   nameInput,
@@ -25,39 +24,17 @@ import {
   avatarSaveButton,
   avatarInput
 } from "./constants.js";
-
-//import { openPopup, closePopup } from "./modal.js";
-
 import Card from "./card.js";
-
 import FormValidator from "./validate.js";
-
 import { api } from "./api.js";
-
 import { renderLoading } from "./utils.js";
-
 import Section from "./Section.js";
-
 import UserInfo from "./UserInfo.js";
-
 import Popup from "./Popup.js";
+import PopupWithImage from "./PopupWithImage.js"
 
 //Здесь будет храниться объект с данными о пользователе
 let user; 
-
-
-//эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
-/*
-Схема работы класса Section:
-1) Из api получаем массив карточек (в конце файла)
-2) Передаем массив в метод renderItems()
-3) В нем проходим по каждой карточке и выполняем инструкцию renderer, она описана в index
-4) Колбек renderer создает экземпляр класса Card, генерирует карточку и передает ее методу addItem()
-5) Метод addItem() добавляет ее в разметку
-
-Задача: подставить массив с карточками при создании new Section,
-пока через переопределение let objCards, не получается - Дебаггер пишет: _renderedItems: undefined
-*/
 
 const userInfo = new UserInfo({
   nameElement: '.profile__name',
@@ -72,28 +49,17 @@ const resetForm = (form) => {
   form.reset();
 };
 
-/*Теперь это делает класс UserInfo.setUserInfo()
-
-// Использование полученных данных о пользователе
-const renderProfileData = (data) => {
-  nameElement.textContent = data.name;
-  jobElement.textContent = data.about;
-  nameInput.value = data.name;
-  jobInput.value = data.about;
-  avatarElement.style.backgroundImage = `url(${data.avatar})`;
-};*/
-
 //Функция создания новой карточки
 const prependCard = (name, link) => {
   //отправить на сервер и добавить в DOM
   api.postCard(name, link)
     .then((data) => {
 
-      const newCard = new Card(data, user, api, '#card');
+      const newCard = new Card(data, user, api, '#card', handleClickImage);
       const newCardElement = newCard.generate();
       cardContainer.prepend(newCardElement);
       
-      closePopup(popupAdd);
+      popupAddCard.close();
       resetForm(formCardElement);
       addCardValidation.disableSaveButton(cardSaveButton);
     })
@@ -112,7 +78,7 @@ const createNewAvatar = () => {
   api.patchAvatar(inputValue)
     .then((res) => {
       userInfo.setUserInfo(res); //принимает новые данные пользователя и отправляет их на страницу
-      closePopup(popupUpdate);
+      popupAvatar.close();
       resetForm(avatarForm);
       addCardValidation.disableSaveButton(avatarSaveButton);
     })
@@ -134,7 +100,7 @@ const handleProfileFormSubmit = (evt) => {
   api.patchProfileData(nameValue, jobValue)
     .then((res) => {
       userInfo.setUserInfo(res);
-      closePopup(popupEdit);
+      popupEditor.close();
     })
     .catch((err) => {
       console.log(err);
@@ -159,58 +125,52 @@ avatarForm.addEventListener("submit", (evt) => {
   createNewAvatar();
 });
 
-//---------------------------------- попап редактирования профиля --------------------------------
+//Обработчик отправки формы редактирования профиля
+profileForm.addEventListener("submit", handleProfileFormSubmit);
+
+//------------------------------------ попап редактирования профиля ------------------------------
 
 const popupEditor = new Popup(popupEdit);  
-//Открыть pop-up "Редактирование профиля"
-editButton.addEventListener("click", () => {
-  //openPopup(popupEdit); 
+// Открыть и повесить слушатели на esc и ovl
+editButton.addEventListener("click", () => { 
   popupEditor.open(); 
 });
 
-
-popupEditor.setEventListeners(closeButtonPopupEdit);
-//Закрыть pop-up "Редактирование профиля"
-/*closeButtonPopupEdit.addEventListener("click", () => {
-  //closePopup(popupEdit); 
-});*/
+popupEditor.setEventListeners(closeButtonPopupEdit); //закрыть по кнопке
 
 //------------------------------------- попап добавления карточки ---------------------------------
 
 const popupAddCard = new Popup(popupAdd); 
-//Открыть pop-up "Добавить карточку"
+// Открыть и повесить слушатели на esc и ovl
 addButton.addEventListener("click", () => {
-  //openPopup(popupAdd);
   popupAddCard.open();
 });
 
-popupAddCard.setEventListeners(closeButtonPopupAdd);
-/*//Закрыть pop-up "Добавить карточку"
-closeButtonPopupAdd.addEventListener("click", () => {
-  closePopup(popupAdd);
-});*/
+popupAddCard.setEventListeners(closeButtonPopupAdd); //закрыть по кнопке
 
-//-------------------------------------- остальные пока не трогал ----------------------
+//-------------------------------------- попап открытия картинки ----------------------------------
 
+const popupWithImage = new PopupWithImage(popupImage);
+//Открытие пoпапа в классе Card
+//Эта функция принимает имя и ссылку от Сard и передает их методу open, 
+//а он открывает попап и вешает слушатели на esc и ovl
+const handleClickImage = (name, link) => {
+  popupWithImage.open(name, link)
+}
 
-//Открытие пoпапа есть в цикле обработчика массива
-//Закрыть попап с изображением
-closeButtonPopupImage.addEventListener("click", () => {
-  closePopup(popupImage);
-});
+popupWithImage.setEventListeners(closeButtonPopupImage); //закрыть по кнопке
 
-//Открыть pop-up "Обновить аватар"
+//------------------------------------------ попап аватара ----------------------------------------
+
+const popupAvatar = new Popup(popupUpdate); 
+// Открыть и повесить слушатели на esc и ovl
 updateButton.addEventListener("click", () => {
-  openPopup(popupUpdate);
+  popupAvatar.open();
 });
 
-//Закрыть pop-up "Обновить аватар"
-closeButtonPopupUpdate.addEventListener("click", () => {
-  closePopup(popupUpdate);
-});
+popupAvatar.setEventListeners(closeButtonPopupUpdate); //закрыть по кнопке
 
-//Обработчик отправки формы редактирования профиля
-profileForm.addEventListener("submit", handleProfileFormSubmit);
+//----------------------------------------  валидация форм ---------------------------------------
 
 // Включить валидацию всех трех форм
 const profileValidation = new FormValidator({
@@ -244,36 +204,34 @@ profileValidation.enableValidation();
 addCardValidation.enableValidation();
 avatarUpdateValidation.enableValidation();
 
+//--------------------------------- получение данных пользователя и карточек------------------------
+
 Promise.all([api.getProfileData(), api.getCards()]) 
   .then(([profile, cards]) => {
     user = profile; //переопределили переменную user
 
     const cardList = new Section({data: cards,
       renderer: (item) => {
-        const card = new Card(item, user, api, '#card');
+        const card = new Card(item, user, api, '#card', handleClickImage);
         const cardElement = card.generate();
-    
         cardList.addItem(cardElement); //карточка добавляется в контейнер
       }},
       ".gallery"
     )
 
-    cardList.renderItems(cards); // добавляем карточки в созданный контейнер (классом Section)
+    cardList.renderItems(cards);    //добавляем карточки в созданный контейнер (классом Section)
     userInfo.setUserInfo(profile);  //принимает новые даннные пользователя и отправляет их на страницу
   })
   .catch((err) => {
     console.log(err);
   });
 
- 
- 
+//--------------------------------------------------------------------------------------------------
 
 
 
 
-
-
-  //эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
+//эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
 
 /*
 //Функция вызова запроса удаления карточки
@@ -308,3 +266,18 @@ const callRequestDeleteLike = (cardId, element) => {
       console.log(err);
     });
 };*/
+
+
+//-------------------------------------------------------------------------------------------------
+
+/*
+Схема работы класса Section:
+1) Из api получаем массив карточек (в конце файла)
+2) Передаем массив в метод renderItems()
+3) В нем проходим по каждой карточке и выполняем инструкцию renderer, она описана в index
+4) Колбек renderer создает экземпляр класса Card, генерирует карточку и передает ее методу addItem()
+5) Метод addItem() добавляет ее в разметку
+
+Задача: подставить массив с карточками при создании new Section,
+пока через переопределение let objCards, не получается - Дебаггер пишет: _renderedItems: undefined
+*/
