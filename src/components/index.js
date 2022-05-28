@@ -84,7 +84,7 @@ const createNewAvatar = (inputsArr) => {
     .then((res) => {
       userInfo.setUserInfo(res); //принимает новые данные пользователя и отправляет их на страницу
       popupAvatar.close();
-      addCardValidation.disableSaveButton(avatarSaveButton);
+      avatarUpdateValidation.disableSaveButton(avatarSaveButton);
     })
     .catch((err) => {
       console.log(err);

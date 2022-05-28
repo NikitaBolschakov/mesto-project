@@ -6,6 +6,7 @@ export default class PopupWithForm extends Popup {
   constructor(popup, submitForm, form) {
     super(popup);
     this._submitForm = submitForm;
+    this._form = form;
   }
 
   _getInputValues() {
@@ -22,7 +23,7 @@ export default class PopupWithForm extends Popup {
   }
 
   setEventListeners = (buttonClose, buttonSubmit) => {
-    super.setEventListeners;
+    super.setEventListeners(buttonClose);
     buttonSubmit.addEventListener("click", (evt) => {
       evt.preventDefault();
       renderLoading(true, avatarSaveButton);
@@ -30,3 +31,12 @@ export default class PopupWithForm extends Popup {
     });
   };
 }
+
+//Проблема была в том, что setEventListeners в Popup, была стрелочной
+
+/*Видимо он не может наследовать стрелочную функцию. Причем я пробовал стрелочную функцию и без this контекста 
+внутри, никакую он не хочет наследовать. В принципе, в консоли он так и пишет -
+Cannot read properties of undefined (reading 'call') - Не удается прочитать вызов   */
+
+//super.setEventListeners; - такая строчка вообще не рабочая была и игнорировалась, поэтому ничего не ломалось
+
