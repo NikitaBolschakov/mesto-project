@@ -32,7 +32,8 @@ import { renderLoading } from "./utils.js";
 import Section from "./Section.js";
 import UserInfo from "./UserInfo.js";
 import Popup from "./Popup.js";
-import PopupWithImage from "./PopupWithImage.js"
+import PopupWithImage from "./PopupWithImage.js";
+import PopupWithForm from './PopupWithForm.js';
 
 //Здесь будет храниться объект с данными о пользователе
 let user; 
@@ -44,12 +45,12 @@ const userInfo = new UserInfo({
   nameField: '#field-name',
   statusField: '#field-job'
 });
-
+/*
 //Функция очистки формы
-const resetForm = (form) => {
+export const resetForm = (form) => {
   form.reset();
 };
-
+*/
 //Функция создания новой карточки
 const prependCard = (name, link) => {
   //отправить на сервер и добавить в DOM
@@ -73,14 +74,14 @@ const prependCard = (name, link) => {
 };
 
 //Функция создания аватара
-const createNewAvatar = () => {
-  const inputValue = avatarInput.value;
+const createNewAvatar = (inputsArr) => {
+  const inputValue = inputsArr[0].value;
+  
   //загрузил аватар на сервер
   api.patchAvatar(inputValue)
     .then((res) => {
       userInfo.setUserInfo(res); //принимает новые данные пользователя и отправляет их на страницу
       popupAvatar.close();
-      resetForm(avatarForm);
       addCardValidation.disableSaveButton(avatarSaveButton);
     })
     .catch((err) => {
@@ -118,14 +119,14 @@ formCardElement.addEventListener("submit", (evt) => {
   //значение полей ввода как аргументы функции
   prependCard(titleCard.value, linkCard.value);
 });
-
+/*
 //Обработчик отправки формы изменения аватара
 avatarForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
   renderLoading(true, avatarSaveButton);
   createNewAvatar();
 });
-
+*/
 //Обработчик отправки формы редактирования профиля
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 
@@ -154,8 +155,8 @@ popupAddCard.setEventListeners(closeButtonPopupAdd); //закрыть по кн�
 const popupWithImage = new PopupWithImage(popupImage);
 //Открытие пoпапа в классе Card
 //Эта функция принимает имя и ссылку от Сard и передает их методу open, 
-//а он открывает попап и вешает слушатели на esc и ovl
-const handleClickImage = (name, link) => {
+//а он открывает попап и вешает слушатели на esc и ovl 
+const handleClickImage = (name, link) => {              //может тут просто в класс кард функциию этого класса занести?
   popupWithImage.open(name, link)
 }
 
@@ -163,13 +164,13 @@ popupWithImage.setEventListeners(closeButtonPopupImage); //закрыть по �
 
 //------------------------------------------ попап аватара ----------------------------------------
 
-const popupAvatar = new Popup(popupUpdate); 
+const popupAvatar = new PopupWithForm(popupUpdate, createNewAvatar); 
 // Открыть и повесить слушатели на esc и ovl
 updateButton.addEventListener("click", () => {
   popupAvatar.open();
 });
 
-popupAvatar.setEventListeners(closeButtonPopupUpdate); //закрыть по кнопке
+popupAvatar.setEventListeners(closeButtonPopupUpdate, avatarSaveButton); //закрыть по кнопке
 
 //----------------------------------------  валидация форм ---------------------------------------
 
