@@ -90,7 +90,7 @@ const createNewAvatar = () => {
     });
 };
 
-//Функция изменения данных пользователя
+//Функция изменения данных пользователя                         <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 const handleProfileFormSubmit = (evt) => {
   evt.preventDefault();
   renderLoading(true, editSaveButton);
