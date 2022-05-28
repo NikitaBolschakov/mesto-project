@@ -23,7 +23,6 @@ import {
   cardSaveButton,
   avatarSaveButton,
   avatarInput,
-  
 } from "./constants.js";
 import Card from "./card.js";
 import FormValidator from "./validate.js";
@@ -33,17 +32,17 @@ import Section from "./Section.js";
 import UserInfo from "./UserInfo.js";
 import Popup from "./Popup.js";
 import PopupWithImage from "./PopupWithImage.js";
-import PopupWithForm from './PopupWithForm.js';
+import PopupWithForm from "./PopupWithForm.js";
 
 //Здесь будет храниться объект с данными о пользователе
-let user; 
+let user;
 
 const userInfo = new UserInfo({
-  nameElement: '.profile__name',
-  statusElement: '.profile__status',
-  avatarElement: '.profile__avatar',
-  nameField: '#field-name',
-  statusField: '#field-job'
+  nameElement: ".profile__name",
+  statusElement: ".profile__status",
+  avatarElement: ".profile__avatar",
+  nameField: "#field-name",
+  statusField: "#field-job",
 });
 /*
 //Функция очистки формы
@@ -52,17 +51,19 @@ export const resetForm = (form) => {
 };
 */
 //Функция создания новой карточки
-const prependCard = (name, link) => {
+const prependCard = (inputsArr) => {
+  const name = inputsArr[0].value;
+  const link = inputsArr[1].value;
   //отправить на сервер и добавить в DOM
-  api.postCard(name, link)
+  api
+    .postCard(name, link)
     .then((data) => {
-
-      const newCard = new Card(data, user, api, '#card', handleClickImage);
+      const newCard = new Card(data, user, api, "#card", handleClickImage);
       const newCardElement = newCard.generate();
       cardContainer.prepend(newCardElement);
-      
+      console.log(popupAddCard);
       popupAddCard.close();
-      resetForm(formCardElement);
+      console.log(popupAddCard.close());
       addCardValidation.disableSaveButton(cardSaveButton);
     })
     .catch((err) => {
@@ -76,9 +77,10 @@ const prependCard = (name, link) => {
 //Функция создания аватара
 const createNewAvatar = (inputsArr) => {
   const inputValue = inputsArr[0].value;
-  
+
   //загрузил аватар на сервер
-  api.patchAvatar(inputValue)
+  api
+    .patchAvatar(inputValue)
     .then((res) => {
       userInfo.setUserInfo(res); //принимает новые данные пользователя и отправляет их на страницу
       popupAvatar.close();
@@ -90,7 +92,7 @@ const createNewAvatar = (inputsArr) => {
     .finally(() => {
       renderLoading(false, avatarSaveButton);
     });
-};
+}
 
 //Функция изменения данных пользователя
 const handleProfileFormSubmit = (evt) => {
@@ -99,7 +101,8 @@ const handleProfileFormSubmit = (evt) => {
   const nameValue = nameInput.value;
   const jobValue = jobInput.value;
   //Отправляю на сервер новые данные
-  api.patchProfileData(nameValue, jobValue)
+  api
+    .patchProfileData(nameValue, jobValue)
     .then((res) => {
       userInfo.setUserInfo(res);
       popupEditor.close();
@@ -111,7 +114,7 @@ const handleProfileFormSubmit = (evt) => {
       renderLoading(false, editSaveButton);
     });
 };
-
+/*
 //Обработчик отправки формы с карточкой
 formCardElement.addEventListener("submit", (evt) => {
   evt.preventDefault();
@@ -119,6 +122,7 @@ formCardElement.addEventListener("submit", (evt) => {
   //значение полей ввода как аргументы функции
   prependCard(titleCard.value, linkCard.value);
 });
+*/
 /*
 //Обработчик отправки формы изменения аватара
 avatarForm.addEventListener("submit", (evt) => {
@@ -132,75 +136,83 @@ profileForm.addEventListener("submit", handleProfileFormSubmit);
 
 //------------------------------------ попап редактирования профиля ------------------------------
 
-const popupEditor = new Popup(popupEdit);  
+const popupEditor = new Popup(popupEdit);
 // Открыть и повесить слушатели на esc и ovl
-editButton.addEventListener("click", () => { 
-  popupEditor.open(); 
+editButton.addEventListener("click", () => {
+  popupEditor.open();
 });
 
 popupEditor.setEventListeners(closeButtonPopupEdit); //закрыть по кнопке
 
 //------------------------------------- попап добавления карточки ---------------------------------
 
-const popupAddCard = new Popup(popupAdd); 
+const popupAddCard = new PopupWithForm(popupAdd, prependCard);
 // Открыть и повесить слушатели на esc и ovl
 addButton.addEventListener("click", () => {
   popupAddCard.open();
 });
-
-popupAddCard.setEventListeners(closeButtonPopupAdd); //закрыть по кнопке
+popupAddCard.setEventListeners(closeButtonPopupAdd, cardSaveButton); //закрыть по кнопке
 
 //-------------------------------------- попап открытия картинки ----------------------------------
 
 const popupWithImage = new PopupWithImage(popupImage);
 //Открытие пoпапа в классе Card
-//Эта функция принимает имя и ссылку от Сard и передает их методу open, 
-//а он открывает попап и вешает слушатели на esc и ovl 
-const handleClickImage = (name, link) => {              //может тут просто в класс кард функциию этого класса занести?
-  popupWithImage.open(name, link)
-}
+//Эта функция принимает имя и ссылку от Сard и передает их методу open,
+//а он открывает попап и вешает слушатели на esc и ovl
+const handleClickImage = (name, link) => {
+  //может тут просто в класс кард функциию этого класса занести?
+  popupWithImage.open(name, link);
+};
 
 popupWithImage.setEventListeners(closeButtonPopupImage); //закрыть по кнопке
 
 //------------------------------------------ попап аватара ----------------------------------------
 
-const popupAvatar = new PopupWithForm(popupUpdate, createNewAvatar); 
+const popupAvatar = new PopupWithForm(popupUpdate, createNewAvatar);
 // Открыть и повесить слушатели на esc и ovl
 updateButton.addEventListener("click", () => {
   popupAvatar.open();
 });
-
 popupAvatar.setEventListeners(closeButtonPopupUpdate, avatarSaveButton); //закрыть по кнопке
 
 //----------------------------------------  валидация форм ---------------------------------------
 
 // Включить валидацию всех трех форм
-const profileValidation = new FormValidator({
-  formSelector: ".popup__form",
-  inputSelector: ".popup__field",
-  submitButtonSelector: ".popup__button-submit",
-  inactiveButtonClass: "popup__button-submit_inactive",
-  inputErrorClass: "popup__field_type_error",
-  errorClass: "popup__field-error_active",
-}, profileForm);
+const profileValidation = new FormValidator(
+  {
+    formSelector: ".popup__form",
+    inputSelector: ".popup__field",
+    submitButtonSelector: ".popup__button-submit",
+    inactiveButtonClass: "popup__button-submit_inactive",
+    inputErrorClass: "popup__field_type_error",
+    errorClass: "popup__field-error_active",
+  },
+  profileForm
+);
 
-const avatarUpdateValidation = new FormValidator({
-  formSelector: ".popup__form",
-  inputSelector: ".popup__field",
-  submitButtonSelector: ".popup__button-submit",
-  inactiveButtonClass: "popup__button-submit_inactive",
-  inputErrorClass: "popup__field_type_error",
-  errorClass: "popup__field-error_active",
-}, avatarForm);
+const avatarUpdateValidation = new FormValidator(
+  {
+    formSelector: ".popup__form",
+    inputSelector: ".popup__field",
+    submitButtonSelector: ".popup__button-submit",
+    inactiveButtonClass: "popup__button-submit_inactive",
+    inputErrorClass: "popup__field_type_error",
+    errorClass: "popup__field-error_active",
+  },
+  avatarForm
+);
 
-const addCardValidation = new FormValidator({
-  formSelector: ".popup__form",
-  inputSelector: ".popup__field",
-  submitButtonSelector: ".popup__button-submit",
-  inactiveButtonClass: "popup__button-submit_inactive",
-  inputErrorClass: "popup__field_type_error",
-  errorClass: "popup__field-error_active",
-}, formCardElement);
+const addCardValidation = new FormValidator(
+  {
+    formSelector: ".popup__form",
+    inputSelector: ".popup__field",
+    submitButtonSelector: ".popup__button-submit",
+    inactiveButtonClass: "popup__button-submit_inactive",
+    inputErrorClass: "popup__field_type_error",
+    errorClass: "popup__field-error_active",
+  },
+  formCardElement
+);
 
 profileValidation.enableValidation();
 addCardValidation.enableValidation();
@@ -208,29 +220,29 @@ avatarUpdateValidation.enableValidation();
 
 //--------------------------------- получение данных пользователя и карточек------------------------
 
-Promise.all([api.getProfileData(), api.getCards()]) 
+Promise.all([api.getProfileData(), api.getCards()])
   .then(([profile, cards]) => {
     user = profile; //переопределили переменную user
-    const cardList = new Section({data: cards,
-      renderer: (item) => {
-        const card = new Card(item, user, api, '#card', handleClickImage);
-        const cardElement = card.generate();
-        cardList.addItem(cardElement); //карточка добавляется в контейнер
-      }},
+    const cardList = new Section(
+      {
+        data: cards,
+        renderer: (item) => {
+          const card = new Card(item, user, api, "#card", handleClickImage);
+          const cardElement = card.generate();
+          cardList.addItem(cardElement); //карточка добавляется в контейнер
+        },
+      },
       ".gallery"
-    )
+    );
 
-    cardList.renderItems(cards);    //добавляем карточки в созданный контейнер (классом Section)
-    userInfo.setUserInfo(profile);  //принимает новые даннные пользователя и отправляет их на страницу
+    cardList.renderItems(cards); //добавляем карточки в созданный контейнер (классом Section)
+    userInfo.setUserInfo(profile); //принимает новые даннные пользователя и отправляет их на страницу
   })
   .catch((err) => {
     console.log(err);
   });
 
 //--------------------------------------------------------------------------------------------------
-
-
-
 
 //эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
 
@@ -267,7 +279,6 @@ const callRequestDeleteLike = (cardId, element) => {
       console.log(err);
     });
 };*/
-
 
 //-------------------------------------------------------------------------------------------------
 
