@@ -23,10 +23,12 @@ import {
   editSaveButton,
   cardSaveButton,
   avatarSaveButton,
-  avatarInput
+  avatarInput,
+  
 } from "./constants.js";
 
-import { openPopup, closePopup } from "./modal.js";
+//import { openPopup, closePopup } from "./modal.js";
+import Popup from "./modal.js";
 
 import Card from "./card.js";
 
@@ -36,16 +38,13 @@ import { api } from "./api.js";
 
 import { renderLoading } from "./utils.js";
 
-<<<<<<< HEAD
 import Section from "./Section.js";
 
 //Здесь будет храниться объект с данными о пользователе
 let user; 
 //let cards;
 
-=======
 import UserInfo from "./UserInfo.js";
->>>>>>> 3dfcb22307dd3cdfdf21c4961119e650ae78a768
 
 //эти функции теперь методы класса card, хотя возможно потом их нужно будет перенести в index
 /*
@@ -63,6 +62,12 @@ import UserInfo from "./UserInfo.js";
 
 //При инициализации класса передается объект карточек, полученный от api и функция для отрисовки каждой карточки
 
+const popupAdd1 = new Popup(popupAdd);
+popupAdd1.setEventListeners(closeButtonPopupAdd);
+const popupUpdate1 = new Popup(popupUpdate);
+popupUpdate1.setEventListeners(closeButtonPopupAdd);
+const popupEdit1 = new Popup(popupEdit);
+popupEdit1.setEventListeners(closeButtonPopupEdit);
 
 
 
@@ -100,7 +105,7 @@ const prependCard = (name, link) => {
       const newCardElement = newCard.generate();
       cardContainer.prepend(newCardElement);
       
-      closePopup(popupAdd);
+      popupAdd1.closePopup(popupAdd);
       resetForm(formCardElement);
       addCardValidation.disableSaveButton(cardSaveButton);
     })
@@ -120,7 +125,7 @@ const createNewAvatar = () => {
     .then((res) => {
       //renderProfileData(res);  //теперь это делает UserInfo.setUserInfo
       userInfo.setUserInfo(res); //принимает новые данные пользователя и отправляет их на страницу
-      closePopup(popupUpdate);
+      popupUpdate1.closePopup(popupUpdate);
       resetForm(avatarForm);
       addCardValidation.disableSaveButton(avatarSaveButton);
     })
@@ -143,7 +148,7 @@ const handleProfileFormSubmit = (evt) => {
     .then((res) => {
       //renderProfileData(res); //теперь это делает UserInfo.setUserInfo
       userInfo.setUserInfo(res);
-      closePopup(popupEdit);
+      popupEdit1.closePopup(popupEdit);
     })
     .catch((err) => {
       console.log(err);
@@ -170,7 +175,7 @@ avatarForm.addEventListener("submit", (evt) => {
 
 //Открыть pop-up "Редактирование профиля"
 editButton.addEventListener("click", () => {
-  openPopup(popupEdit);
+  popupEdit1.openPopup(popupEdit);
 });
 
 //Закрыть pop-up "Редактирование профиля"
@@ -180,7 +185,7 @@ closeButtonPopupEdit.addEventListener("click", () => {
 
 //Открыть pop-up "Добавить карточку"
 addButton.addEventListener("click", () => {
-  openPopup(popupAdd);
+  popupAdd1.openPopup(popupAdd);
 });
 
 //Закрыть pop-up "Добавить карточку"
@@ -196,7 +201,7 @@ closeButtonPopupImage.addEventListener("click", () => {
 
 //Открыть pop-up "Обновить аватар"
 updateButton.addEventListener("click", () => {
-  openPopup(popupUpdate);
+  popupUpdate1.openPopup(popupUpdate);
 });
 
 //Закрыть pop-up "Обновить аватар"
@@ -242,7 +247,6 @@ avatarUpdateValidation.enableValidation();
 Promise.all([api.getProfileData(), api.getCards()]) 
   .then(([profile, cards]) => {
     user = profile; //переопределили переменную user
-<<<<<<< HEAD
     
     const cardList = new Section({data: cards,
       renderer: (item) => {
@@ -253,18 +257,16 @@ Promise.all([api.getProfileData(), api.getCards()])
       }},
       ".gallery"
     )
-
+    userInfo.setUserInfo(profile); 
     //"при положительном ответе": отдай массив из полученных значений
-    renderProfileData(profile); //отредактируй данные профиля используя значение user
+    //renderProfileData(profile); //отредактируй данные профиля используя значение user
 
     cardList.renderItems(cards); // добавляем карточки в созданный контейнер (классом Section)
     
     // Это теперь делает класс Section
-=======
     //renderProfileData(profile); //теперь это делает UserInfo.setUserInfo
-    userInfo.setUserInfo(profile);  //принимает новые даннные пользователя и отправляет их на страницу
+     //принимает новые даннные пользователя и отправляет их на страницу
 
->>>>>>> 3dfcb22307dd3cdfdf21c4961119e650ae78a768
     //создать для каждой карточки экземпляр класса
     /*cards.forEach((element) => {
       const newCard = new Card(element, user, api, '#card');

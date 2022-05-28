@@ -4,7 +4,7 @@ import {
   popupImage,
 } from "./constants.js";
 
-import { openPopup } from "./modal.js";
+//import { openPopup } from "./modal.js";
 
 export default class Card {
   constructor (data, user, api, selector) {
