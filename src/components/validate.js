@@ -1,5 +1,3 @@
-import { selectors } from "./constants.js";
-
 export default class FormValidator {
   constructor(selectors, selector) {
     this._saveButton = selectors.submitButtonSelector;
