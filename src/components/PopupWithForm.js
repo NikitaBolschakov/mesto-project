@@ -22,7 +22,9 @@ export default class PopupWithForm extends Popup {
   }
 
   setEventListeners = (buttonClose, buttonSubmit) => {
-    super.setEventListeners;
+    buttonClose.addEventListener("click", () => {
+      this.close();
+    });
     buttonSubmit.addEventListener("click", (evt) => {
       evt.preventDefault();
       renderLoading(true, avatarSaveButton);
