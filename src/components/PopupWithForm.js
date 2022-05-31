@@ -1,6 +1,6 @@
 import Popup from "./Popup";
-import { renderLoading } from "./utils.js";
-import { avatarSaveButton } from "./constants.js";
+import { renderLoading } from "./utils/utils.js";
+import { avatarSaveButton } from "./utils/constants.js";
 
 export default class PopupWithForm extends Popup {
   constructor(popup, submitForm, form) {

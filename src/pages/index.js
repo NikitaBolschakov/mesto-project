@@ -15,15 +15,15 @@ import {
   cardSaveButton,
   avatarSaveButton,
   validationConfig
-} from "./constants.js";
-import { renderLoading } from "./utils.js";
-import { api } from "./Api.js";
-import Card from "./Card.js";
-import FormValidator from "./FormValidator.js";
-import Section from "./Section.js";
-import UserInfo from "./UserInfo.js";
-import PopupWithImage from "./PopupWithImage.js";
-import PopupWithForm from "./PopupWithForm.js";
+} from "../components/utils/constants.js";
+import { renderLoading } from "../components/utils/utils.js";
+import { api } from "../components/Api.js";
+import Card from "../components/Card.js";
+import FormValidator from "../components/FormValidator.js";
+import Section from "../components/Section.js";
+import UserInfo from "../components/UserInfo.js";
+import PopupWithImage from "../components/PopupWithImage.js";
+import PopupWithForm from "../components/PopupWithForm.js";
 
 //Здесь будет храниться объект с данными о пользователе
 let user;
