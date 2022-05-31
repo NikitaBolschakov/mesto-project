@@ -5,24 +5,21 @@ import {
   cardContainer,
   formCardElement,
   editButton,
-  closeButtonPopupEdit,
   popupEdit,
   addButton,
-  closeButtonPopupAdd,
   popupAdd,
-  closeButtonPopupImage,
   popupUpdate,
-  closeButtonPopupUpdate,
   updateButton,
   popupImage,
   editSaveButton,
   cardSaveButton,
   avatarSaveButton,
+  validationConfig
 } from "./constants.js";
-import Card from "./card.js";
-import FormValidator from "./validate.js";
-import { api } from "./api.js";
 import { renderLoading } from "./utils.js";
+import { api } from "./Api.js";
+import Card from "./Card.js";
+import FormValidator from "./FormValidator.js";
 import Section from "./Section.js";
 import UserInfo from "./UserInfo.js";
 import PopupWithImage from "./PopupWithImage.js";
@@ -114,7 +111,7 @@ editButton.addEventListener("click", () => {
   popupEditor.open();
 });
 
-popupEditor.setEventListeners(closeButtonPopupEdit, profileForm); //закрыть по кнопке
+popupEditor.setEventListeners(profileForm); //закрыть по кнопке
 
 //------------------------------------- попап добавления карточки ---------------------------------
 
@@ -123,13 +120,13 @@ const popupAddCard = new PopupWithForm(popupAdd, prependCard);
 addButton.addEventListener("click", () => {
   popupAddCard.open();
 });
-popupAddCard.setEventListeners(closeButtonPopupAdd, formCardElement); //закрыть по кнопке
+popupAddCard.setEventListeners(formCardElement); //закрыть по кнопке
 
 //-------------------------------------- попап открытия картинки ----------------------------------
 
 const popupWithImage = new PopupWithImage(popupImage);
 //Открытие пoпапа в классе Card
-popupWithImage.setEventListeners(closeButtonPopupImage); //закрыть по кнопке
+popupWithImage.setEventListeners(); //закрыть по кнопке
 
 //------------------------------------------ попап аватара ----------------------------------------
 
@@ -138,46 +135,14 @@ const popupAvatar = new PopupWithForm(popupUpdate, createNewAvatar);
 updateButton.addEventListener("click", () => {
   popupAvatar.open();
 });
-popupAvatar.setEventListeners(closeButtonPopupUpdate, avatarForm); //закрыть по кнопке
+popupAvatar.setEventListeners(avatarForm); //закрыть по кнопке
 
 //----------------------------------------  валидация форм ---------------------------------------
 
 // Включить валидацию всех трех форм
-const profileValidation = new FormValidator(
-  {
-    formSelector: ".popup__form",
-    inputSelector: ".popup__field",
-    submitButtonSelector: ".popup__button-submit",
-    inactiveButtonClass: "popup__button-submit_inactive",
-    inputErrorClass: "popup__field_type_error",
-    errorClass: "popup__field-error_active",
-  },
-  profileForm
-);
-
-const avatarUpdateValidation = new FormValidator(
-  {
-    formSelector: ".popup__form",
-    inputSelector: ".popup__field",
-    submitButtonSelector: ".popup__button-submit",
-    inactiveButtonClass: "popup__button-submit_inactive",
-    inputErrorClass: "popup__field_type_error",
-    errorClass: "popup__field-error_active",
-  },
-  avatarForm
-);
-
-const addCardValidation = new FormValidator(
-  {
-    formSelector: ".popup__form",
-    inputSelector: ".popup__field",
-    submitButtonSelector: ".popup__button-submit",
-    inactiveButtonClass: "popup__button-submit_inactive",
-    inputErrorClass: "popup__field_type_error",
-    errorClass: "popup__field-error_active",
-  },
-  formCardElement
-);
+const profileValidation = new FormValidator(validationConfig,profileForm);
+const avatarUpdateValidation = new FormValidator(validationConfig, avatarForm);
+const addCardValidation = new FormValidator(validationConfig, formCardElement);
 
 profileValidation.enableValidation();
 addCardValidation.enableValidation();

@@ -4,6 +4,7 @@ export default class UserInfo {
     this._nameElement = document.querySelector(nameElement);
     this._statusElement = document.querySelector(statusElement);
     this._avatarElement = document.querySelector(avatarElement);
+
     this._nameField = document.querySelector(nameField);
     this._statusField = document.querySelector(statusField);
   }

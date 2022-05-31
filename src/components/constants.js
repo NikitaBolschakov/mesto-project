@@ -28,16 +28,16 @@ const avatarSaveButton = document.querySelector('#button-avatar-save')
 const avatarInput = document.querySelector('#field-avatar');
 const avatarElement = document.querySelector('.profile__avatar');
 
-const selectors = {
+const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__field",
   submitButtonSelector: ".popup__button-submit",
   inactiveButtonClass: "popup__button-submit_inactive",
   inputErrorClass: "popup__field_type_error",
   errorClass: "popup__field-error_active",
-};
+}
 
-export {
+export { 
   nameElement,
   jobElement,
   profileForm,
@@ -67,5 +67,5 @@ export {
   avatarSaveButton,
   avatarInput,
   avatarElement,
-  selectors
+  validationConfig
 };

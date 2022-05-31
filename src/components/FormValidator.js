@@ -1,12 +1,12 @@
 export default class FormValidator {
-  constructor(selectors, selector) {
+  constructor(selectors, form) {
     this._saveButton = selectors.submitButtonSelector;
     this._inactiveButtonClass = selectors.inactiveButtonClass;
     this._formElement = selectors.formSelector;
     this._inputElement = selectors.inputSelector;
     this._inputErrorClass = selectors.inputErrorClass;
     this._errorClass = selectors.errorClass;
-    this._selector = selector;
+    this._form = form;
   }
   //Отключение кнопки Сохранить после отправки формы
   disableSaveButton(saveButton) {
@@ -69,15 +69,9 @@ export default class FormValidator {
   }
 
   //Функция, которая блокирует/разблокирует кнопку
-  // Функция принимает массив полей ввода
-  // и элемент кнопки, состояние которой нужно менять
   _toggleButtonState(inputList, buttonElement) {
-    // Если есть хотя бы один невалидный инпут
     if (this._hasInvalidInput(inputList)) {
-      // сделай кнопку неактивной
-      buttonElement.classList.add(this._inactiveButtonClass);
-      // отключи ее
-      buttonElement.setAttribute("disabled", true);
+      this.disableSaveButton(buttonElement);
     } else {
       // иначе сделай кнопку активной
       buttonElement.classList.remove(this._inactiveButtonClass);
@@ -115,7 +109,7 @@ export default class FormValidator {
   //Функция, которая включает валидацию
   enableValidation() {
     // Найдём форму с указанным классом в DOM,
-    const formElement = this._selector;
+    const formElement = this._form;
     formElement.addEventListener("submit", (evt) => {
       evt.preventDefault();
     });
