@@ -6,6 +6,8 @@ import {
   formCardElement,
   editButton,
   popupEdit,
+  nameInput,
+  jobInput,
   addButton,
   popupAdd,
   popupUpdate,
@@ -16,7 +18,6 @@ import {
   avatarSaveButton,
   validationConfig
 } from "../components/utils/constants.js";
-import { renderLoading } from "../components/utils/utils.js";
 import { api } from "../components/Api.js";
 import Card from "../components/Card.js";
 import FormValidator from "../components/FormValidator.js";
@@ -31,9 +32,7 @@ let user;
 const userInfo = new UserInfo({
   nameElement: ".profile__name",
   statusElement: ".profile__status",
-  avatarElement: ".profile__avatar",
-  nameField: "#field-name",
-  statusField: "#field-job",
+  avatarElement: ".profile__avatar"
 });
 
 //Функция создания новой карточки
@@ -54,7 +53,7 @@ const prependCard = (inputsArr) => {
       console.log(err);
     })
     .finally(() => {
-      renderLoading(false, cardSaveButton);
+      popupAddCard.renderLoading(false, cardSaveButton);
     });
 };
 
@@ -74,7 +73,7 @@ const createNewAvatar = (inputsArr) => {
       console.log(err);
     })
     .finally(() => {
-      renderLoading(false, avatarSaveButton);
+      popupEditor.renderLoading(false, avatarSaveButton);
     });
 };
 
@@ -86,6 +85,7 @@ const handleProfileFormSubmit = (inputsArr) => {
   api
     .patchProfileData(nameValue, jobValue)
     .then((res) => {
+      user = res; 
       userInfo.setUserInfo(res);
       popupEditor.close();
     })
@@ -93,7 +93,7 @@ const handleProfileFormSubmit = (inputsArr) => {
       console.log(err);
     })
     .finally(() => {
-      renderLoading(false, editSaveButton);
+      popupEditor.renderLoading(false, editSaveButton);
     });
 };
 
@@ -109,9 +109,11 @@ const popupEditor = new PopupWithForm(popupEdit, handleProfileFormSubmit);
 // Открыть и повесить слушатели на esc и ovl
 editButton.addEventListener("click", () => {
   popupEditor.open();
+  nameInput.value = user.name;    
+  jobInput.value = user.about;
 });
 
-popupEditor.setEventListeners(profileForm); //закрыть по кнопке
+popupEditor.setEventListeners(); //закрыть по кнопке
 
 //------------------------------------- попап добавления карточки ---------------------------------
 
@@ -120,7 +122,7 @@ const popupAddCard = new PopupWithForm(popupAdd, prependCard);
 addButton.addEventListener("click", () => {
   popupAddCard.open();
 });
-popupAddCard.setEventListeners(formCardElement); //закрыть по кнопке
+popupAddCard.setEventListeners(); //закрыть по кнопке
 
 //-------------------------------------- попап открытия картинки ----------------------------------
 
@@ -135,7 +137,7 @@ const popupAvatar = new PopupWithForm(popupUpdate, createNewAvatar);
 updateButton.addEventListener("click", () => {
   popupAvatar.open();
 });
-popupAvatar.setEventListeners(avatarForm); //закрыть по кнопке
+popupAvatar.setEventListeners(); //закрыть по кнопке
 
 //----------------------------------------  валидация форм ---------------------------------------
 
@@ -152,7 +154,7 @@ avatarUpdateValidation.enableValidation();
 
 Promise.all([api.getProfileData(), api.getCards()])
   .then(([profile, cards]) => {
-    user = profile; //переопределили переменную user
+    user = profile; 
     const cardList = new Section(
       {
         data: cards,
