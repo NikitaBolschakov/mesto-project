@@ -16,7 +16,7 @@ import {
   editSaveButton,
   cardSaveButton,
   avatarSaveButton,
-  validationConfig
+  validationConfig,
 } from "../components/utils/constants.js";
 import { api } from "../components/Api.js";
 import Card from "../components/Card.js";
@@ -32,13 +32,13 @@ let user;
 const userInfo = new UserInfo({
   nameElement: ".profile__name",
   statusElement: ".profile__status",
-  avatarElement: ".profile__avatar"
+  avatarElement: ".profile__avatar",
 });
 
 //Функция создания новой карточки
-const prependCard = (inputsArr) => {
-  const name = inputsArr[0].value;
-  const link = inputsArr[1].value;
+const prependCard = (inputsObj) => {
+  const name = inputsObj["name-image"];
+  const link = inputsObj["link-image"];
   //отправить на сервер и добавить в DOM
   api
     .postCard(name, link)
@@ -57,8 +57,8 @@ const prependCard = (inputsArr) => {
 };
 
 //Функция создания аватара
-const createNewAvatar = (inputsArr) => {
-  const inputValue = inputsArr[0].value;
+const createNewAvatar = (inputsObj) => {
+  const inputValue = inputsObj.avatar;
   //загрузил аватар на сервер
   api
     .patchAvatar(inputValue)
@@ -75,14 +75,14 @@ const createNewAvatar = (inputsArr) => {
 };
 
 //Функция изменения данных пользователя
-const handleProfileFormSubmit = (inputsArr) => {
-  const nameValue = inputsArr[0].value;
-  const jobValue = inputsArr[1].value;
+const handleProfileFormSubmit = (inputsObj) => {
+  const nameValue = inputsObj.name;
+  const jobValue = inputsObj.status;
   //Отправляю на сервер новые данные
   api
     .patchProfileData(nameValue, jobValue)
     .then((res) => {
-      user = res; 
+      user = res;
       userInfo.setUserInfo(res);
       popupEditor.close();
     })
@@ -105,8 +105,8 @@ const handleClickImage = (name, link) => {
 const popupEditor = new PopupWithForm(popupEdit, handleProfileFormSubmit);
 
 editButton.addEventListener("click", () => {
-  profileValidation.resetValidation();
-  nameInput.value = user.name;    
+  formValidators['profile'].resetValidation();
+  nameInput.value = user.name;
   jobInput.value = user.about;
   popupEditor.open();
 });
@@ -118,7 +118,7 @@ popupEditor.setEventListeners(); //закрыть по кнопке
 const popupAddCard = new PopupWithForm(popupAdd, prependCard);
 // Открыть и повесить слушатели на esc и ovl
 addButton.addEventListener("click", () => {
-  addCardValidation.resetValidation();
+  formValidators['add'].resetValidation();
   popupAddCard.open();
 });
 popupAddCard.setEventListeners(); //закрыть по кнопке
@@ -134,27 +134,38 @@ popupWithImage.setEventListeners(); //закрыть по кнопке
 const popupAvatar = new PopupWithForm(popupUpdate, createNewAvatar);
 // Открыть и повесить слушатели на esc и ovl
 updateButton.addEventListener("click", () => {
-  avatarUpdateValidation.resetValidation();
+  formValidators['form-update'].resetValidation();
   popupAvatar.open();
 });
 popupAvatar.setEventListeners(); //закрыть по кнопке
 
 //----------------------------------------  валидация форм ---------------------------------------
 
-// Включить валидацию всех трех форм
-const profileValidation = new FormValidator(validationConfig,profileForm);
-const avatarUpdateValidation = new FormValidator(validationConfig, avatarForm);
-const addCardValidation = new FormValidator(validationConfig, formCardElement);
+const formValidators = {};
 
-profileValidation.enableValidation();
-addCardValidation.enableValidation();
-avatarUpdateValidation.enableValidation();
+//Включение валидации
+const enableValidation = (validationConfig) => {
+  const formList = Array.from(
+    document.querySelectorAll(validationConfig.formSelector)
+  );
+  formList.forEach((formElement) => {
+    const validator = new FormValidator(validationConfig, formElement);
+    // получаем данные из атрибута `name` у формы
+    const formName = formElement.getAttribute("name");
+    // вот тут в объект записываем под именем формы
+    formValidators[formName] = validator;
+    validator.enableValidation();
+  });
+};
+
+enableValidation(validationConfig);
+
 
 //--------------------------------- получение данных пользователя и карточек------------------------
 
 Promise.all([api.getProfileData(), api.getCards()])
   .then(([profile, cards]) => {
-    user = profile; 
+    user = profile;
     const cardList = new Section(
       {
         data: cards,
