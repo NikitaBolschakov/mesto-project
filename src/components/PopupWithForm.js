@@ -6,45 +6,25 @@ export default class PopupWithForm extends Popup {
     this._submitForm = submitForm;
     this._form = this._popup.querySelector('.popup__form');
     this._saveButton = this._popup.querySelector('.popup__button-submit');
-
-    //this._inputList = this._form.querySelectorAll('.popup__field');
+    this._formInputs = Array.from(this._popup.querySelectorAll(".popup__field"))
   }
 
   _getInputValues() {                            
-    const formInputs = Array.from(
-      this._popup.querySelectorAll(".popup__field")
-    );
-    return formInputs;
-    
-    /*
-    this._formValues = {};
-    this._inputList.forEach(input => this._formValues[input.name] = input.value);
-    */
+    return this._formInputs;
   }
-
-  /*setInputValues(data) {
-    this._inputList.forEach((input) => {
-      // тут вставляем в `value` инпута данные из объекта по атрибуту `name` этого инпута
-      input.value = data[input.name];
-    });
-  }*/
 
   close() {
     super.close();
     this._form.reset();
   }
 
-  renderLoading = (isLoading, button) => {
+  renderLoading = (isLoading, buttonText = "") => {
     if (isLoading) {
-      button.textContent = "Сохранение...";
-      button.disabled = true;
+      this._saveButton.textContent = "Сохранение...";
+      this._saveButton.disabled = true;
     } else {
-      if (button.hasAttribute("button-submit-edit")) {
-        button.textContent = "Создать";
-      } else {
-        button.textContent = "Сохранить";
-      }
-      button.disabled = false;
+        this._saveButton.textContent = buttonText;
+        this._saveButton.disabled = false;
     }
   };
 
@@ -52,7 +32,7 @@ export default class PopupWithForm extends Popup {
     super.setEventListeners();
     this._form.addEventListener("submit", (evt) => {
       evt.preventDefault();
-      this.renderLoading(true, this._saveButton);
+      this.renderLoading(true);
       this._submitForm(this._getInputValues());
     });
   };

@@ -47,33 +47,30 @@ const prependCard = (inputsArr) => {
       const newCardElement = newCard.generate();
       cardContainer.prepend(newCardElement);
       popupAddCard.close();
-      addCardValidation.disableSaveButton(cardSaveButton);
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-      popupAddCard.renderLoading(false, cardSaveButton);
+      popupAddCard.renderLoading(false, "Создать");
     });
 };
 
 //Функция создания аватара
 const createNewAvatar = (inputsArr) => {
   const inputValue = inputsArr[0].value;
-
   //загрузил аватар на сервер
   api
     .patchAvatar(inputValue)
     .then((res) => {
       userInfo.setUserInfo(res); //принимает новые данные пользователя и отправляет их на страницу
       popupAvatar.close();
-      avatarUpdateValidation.disableSaveButton(avatarSaveButton);
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-      popupEditor.renderLoading(false, avatarSaveButton);
+      popupAvatar.renderLoading(false, "Сoхранить");
     });
 };
 
@@ -93,7 +90,7 @@ const handleProfileFormSubmit = (inputsArr) => {
       console.log(err);
     })
     .finally(() => {
-      popupEditor.renderLoading(false, editSaveButton);
+      popupEditor.renderLoading(false, "Сoхранить");
     });
 };
 
@@ -106,11 +103,12 @@ const handleClickImage = (name, link) => {
 //------------------------------------ попап редактирования профиля ------------------------------
 
 const popupEditor = new PopupWithForm(popupEdit, handleProfileFormSubmit);
-// Открыть и повесить слушатели на esc и ovl
+
 editButton.addEventListener("click", () => {
-  popupEditor.open();
+  profileValidation.resetValidation();
   nameInput.value = user.name;    
   jobInput.value = user.about;
+  popupEditor.open();
 });
 
 popupEditor.setEventListeners(); //закрыть по кнопке
@@ -120,6 +118,7 @@ popupEditor.setEventListeners(); //закрыть по кнопке
 const popupAddCard = new PopupWithForm(popupAdd, prependCard);
 // Открыть и повесить слушатели на esc и ovl
 addButton.addEventListener("click", () => {
+  addCardValidation.resetValidation();
   popupAddCard.open();
 });
 popupAddCard.setEventListeners(); //закрыть по кнопке
@@ -135,6 +134,7 @@ popupWithImage.setEventListeners(); //закрыть по кнопке
 const popupAvatar = new PopupWithForm(popupUpdate, createNewAvatar);
 // Открыть и повесить слушатели на esc и ovl
 updateButton.addEventListener("click", () => {
+  avatarUpdateValidation.resetValidation();
   popupAvatar.open();
 });
 popupAvatar.setEventListeners(); //закрыть по кнопке
