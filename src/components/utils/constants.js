@@ -22,11 +22,11 @@ const popupUpdate = document.querySelector("#popup-update");
 const closeButtonPopupUpdate = document.querySelector("#close-popup-update");
 const updateButton = document.querySelector(".profile__ovl");
 const popupImage = document.querySelector("#popup-image");
-const editSaveButton = document.querySelector('#button-submit-edit');
+const editSaveButton = document.querySelector("#button-submit-edit");
 const cardSaveButton = document.querySelector("#button-submit-add");
-const avatarSaveButton = document.querySelector('#button-avatar-save')
-const avatarInput = document.querySelector('#field-avatar');
-const avatarElement = document.querySelector('.profile__avatar');
+const avatarSaveButton = document.querySelector("#button-avatar-save");
+const avatarInput = document.querySelector("#field-avatar");
+const avatarElement = document.querySelector(".profile__avatar");
 
 const validationConfig = {
   formSelector: ".popup__form",
@@ -35,9 +35,9 @@ const validationConfig = {
   inactiveButtonClass: "popup__button-submit_inactive",
   inputErrorClass: "popup__field_type_error",
   errorClass: "popup__field-error_active",
-}
+};
 
-export { 
+export {
   nameElement,
   jobElement,
   profileForm,
@@ -67,5 +67,5 @@ export {
   avatarSaveButton,
   avatarInput,
   avatarElement,
-  validationConfig
+  validationConfig,
 };

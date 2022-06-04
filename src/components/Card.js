@@ -62,23 +62,21 @@ export default class Card {
     this._imageCardElement = this._element.querySelector(".element__image");
     //слушатель на лайк
     this._likeButton.addEventListener("click", () => {
-        this._handleToggleLike();
-      });
+      this._handleToggleLike();
+    });
     //слушатель на открытие попапа с изображением
     this._imageCardElement.addEventListener("click", () => {
-        this._handleClickImage(this._name, this._link);
-      });
+      this._handleClickImage(this._name, this._link);
+    });
     //слушатель на кнопку делит
     this._deleteButton.addEventListener("click", () => {
-        this._handleRemoveCard();
-      });
+      this._handleRemoveCard();
+    });
   }
 
   //метод обработчик на лайк
   _handleToggleLike() {
-    if (
-      this._likeButton.classList.contains("element__button-like_active")
-    ) {
+    if (this._likeButton.classList.contains("element__button-like_active")) {
       this._api
         .deleteLike(this._id)
         .then((data) => {

@@ -9,7 +9,7 @@ import {
   popupUpdate,
   updateButton,
   popupImage,
-  validationConfig
+  validationConfig,
 } from "../components/utils/constants.js";
 import { api } from "../components/Api.js";
 import Card from "../components/Card.js";
@@ -29,16 +29,15 @@ const userInfo = new UserInfo({
 
 const cardList = new Section(
   {
-    renderer: (item) => {//                  теперь, по сути, это функция createCard, без вставки элемента в DOM                                             
+    //теперь, по сути, это функция createCard, без вставки элемента в DOM
+    renderer: (item) => {
       const card = new Card(item, user, api, "#card", handleClickImage);
       const cardElement = card.generate();
-      //cardList.addItem(cardElement);                         <<<<<   вставка элемента в DOM , это нужно удалить     
       return cardElement;
     },
   },
   ".gallery"
 );
-
 
 //Функция создания новой карточки
 const prependCard = (inputsObj) => {
@@ -48,10 +47,7 @@ const prependCard = (inputsObj) => {
   api
     .postCard(name, link)
     .then((data) => {
-      //const newCard = new Card(data, user, api, "#card", handleClickImage);      <<<<   так было
-      //const newCardElement = newCard.generate();
-      //cardContainer.prepend(newCardElement);
-      cardList.prependItem(data); //                                               <<<<   теперь всё тут
+      cardList.prependItem(data);
       popupAddCard.close();
     })
     .catch((err) => {
@@ -69,7 +65,7 @@ const createNewAvatar = (inputsObj) => {
   api
     .patchAvatar(inputValue)
     .then((res) => {
-      userInfo.setUserInfo(res); 
+      userInfo.setUserInfo(res);
       popupAvatar.close();
     })
     .catch((err) => {
@@ -84,8 +80,9 @@ const createNewAvatar = (inputsObj) => {
 const handleProfileFormSubmit = (inputsObj) => {
   const nameValue = inputsObj.name;
   const jobValue = inputsObj.status;
-  
-  api.patchProfileData(nameValue, jobValue)  //Отправляем на сервер новые данные
+
+  api
+    .patchProfileData(nameValue, jobValue) //Отправляем на сервер новые данные
     .then((res) => {
       user = res;
       userInfo.setUserInfo(res);
@@ -168,20 +165,7 @@ enableValidation(validationConfig);
 Promise.all([api.getProfileData(), api.getCards()])
   .then(([profile, cards]) => {
     user = profile;
-
-    /*const cardList = new Section(               <<<<<<<<< new Section теперь можно создать глобально
-      {
-        data: cards,                                                <<<<<<<<< ведь data больше не нужен
-        renderer: (item) => {
-          const card = new Card(item, user, api, "#card", handleClickImage);
-          const cardElement = card.generate();
-          cardList.addItem(cardElement); //карточка добавляется в контейнер
-        },
-      },
-      ".gallery"
-    );*/
-
-    cardList.renderItems(cards); //добавляем карточки в созданный контейнер (классом Section)
+    cardList.renderItems(cards); //добавляем карточки в созданный контейнер (метод класса Section)
     userInfo.setUserInfo(profile); //принимает новые даннные пользователя и отправляет их на страницу
   })
   .catch((err) => {
