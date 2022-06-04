@@ -1,9 +1,5 @@
 import "../pages/index.css";
 import {
-  profileForm,
-  avatarForm,
-  cardContainer,
-  formCardElement,
   editButton,
   popupEdit,
   nameInput,
@@ -13,10 +9,7 @@ import {
   popupUpdate,
   updateButton,
   popupImage,
-  editSaveButton,
-  cardSaveButton,
-  avatarSaveButton,
-  validationConfig,
+  validationConfig
 } from "../components/utils/constants.js";
 import { api } from "../components/Api.js";
 import Card from "../components/Card.js";
@@ -26,14 +19,26 @@ import UserInfo from "../components/UserInfo.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 
-//Здесь будет храниться объект с данными о пользователе
-let user;
+let user; // объект с данными о пользователе
 
 const userInfo = new UserInfo({
   nameElement: ".profile__name",
   statusElement: ".profile__status",
   avatarElement: ".profile__avatar",
 });
+
+const cardList = new Section(
+  {
+    renderer: (item) => {//                  теперь, по сути, это функция createCard, без вставки элемента в DOM                                             
+      const card = new Card(item, user, api, "#card", handleClickImage);
+      const cardElement = card.generate();
+      //cardList.addItem(cardElement);                         <<<<<   вставка элемента в DOM , это нужно удалить     
+      return cardElement;
+    },
+  },
+  ".gallery"
+);
+
 
 //Функция создания новой карточки
 const prependCard = (inputsObj) => {
@@ -43,9 +48,10 @@ const prependCard = (inputsObj) => {
   api
     .postCard(name, link)
     .then((data) => {
-      const newCard = new Card(data, user, api, "#card", handleClickImage);
-      const newCardElement = newCard.generate();
-      cardContainer.prepend(newCardElement);
+      //const newCard = new Card(data, user, api, "#card", handleClickImage);      <<<<   так было
+      //const newCardElement = newCard.generate();
+      //cardContainer.prepend(newCardElement);
+      cardList.prependItem(data); //                                               <<<<   теперь всё тут
       popupAddCard.close();
     })
     .catch((err) => {
@@ -63,7 +69,7 @@ const createNewAvatar = (inputsObj) => {
   api
     .patchAvatar(inputValue)
     .then((res) => {
-      userInfo.setUserInfo(res); //принимает новые данные пользователя и отправляет их на страницу
+      userInfo.setUserInfo(res); 
       popupAvatar.close();
     })
     .catch((err) => {
@@ -78,9 +84,8 @@ const createNewAvatar = (inputsObj) => {
 const handleProfileFormSubmit = (inputsObj) => {
   const nameValue = inputsObj.name;
   const jobValue = inputsObj.status;
-  //Отправляю на сервер новые данные
-  api
-    .patchProfileData(nameValue, jobValue)
+  
+  api.patchProfileData(nameValue, jobValue)  //Отправляем на сервер новые данные
     .then((res) => {
       user = res;
       userInfo.setUserInfo(res);
@@ -94,8 +99,7 @@ const handleProfileFormSubmit = (inputsObj) => {
     });
 };
 
-//Эта функция принимает имя и ссылку от Сard и передает их методу open,
-//а он открывает попап и вешает слушатели на esc и ovl
+//Принимает имя и ссылку от Сard и передает их методу open
 const handleClickImage = (name, link) => {
   popupWithImage.open(name, link);
 };
@@ -105,39 +109,40 @@ const handleClickImage = (name, link) => {
 const popupEditor = new PopupWithForm(popupEdit, handleProfileFormSubmit);
 
 editButton.addEventListener("click", () => {
-  formValidators['profile'].resetValidation();
+  formValidators["profile"].resetValidation();
   nameInput.value = user.name;
   jobInput.value = user.about;
   popupEditor.open();
 });
 
-popupEditor.setEventListeners(); //закрыть по кнопке
+popupEditor.setEventListeners();
 
 //------------------------------------- попап добавления карточки ---------------------------------
 
 const popupAddCard = new PopupWithForm(popupAdd, prependCard);
-// Открыть и повесить слушатели на esc и ovl
+
 addButton.addEventListener("click", () => {
-  formValidators['add'].resetValidation();
+  formValidators["add"].resetValidation();
   popupAddCard.open();
 });
-popupAddCard.setEventListeners(); //закрыть по кнопке
+
+popupAddCard.setEventListeners();
 
 //-------------------------------------- попап открытия картинки ----------------------------------
 
 const popupWithImage = new PopupWithImage(popupImage);
-//Открытие пoпапа в классе Card
-popupWithImage.setEventListeners(); //закрыть по кнопке
+popupWithImage.setEventListeners();
 
 //------------------------------------------ попап аватара ----------------------------------------
 
 const popupAvatar = new PopupWithForm(popupUpdate, createNewAvatar);
-// Открыть и повесить слушатели на esc и ovl
+
 updateButton.addEventListener("click", () => {
-  formValidators['form-update'].resetValidation();
+  formValidators["form-update"].resetValidation();
   popupAvatar.open();
 });
-popupAvatar.setEventListeners(); //закрыть по кнопке
+
+popupAvatar.setEventListeners();
 
 //----------------------------------------  валидация форм ---------------------------------------
 
@@ -150,25 +155,23 @@ const enableValidation = (validationConfig) => {
   );
   formList.forEach((formElement) => {
     const validator = new FormValidator(validationConfig, formElement);
-    // получаем данные из атрибута `name` у формы
-    const formName = formElement.getAttribute("name");
-    // вот тут в объект записываем под именем формы
-    formValidators[formName] = validator;
+    const formName = formElement.getAttribute("name"); //получаем данные из атрибута `name` у формы
+    formValidators[formName] = validator; //вот тут в объект записываем под именем формы
     validator.enableValidation();
   });
 };
 
 enableValidation(validationConfig);
 
-
 //--------------------------------- получение данных пользователя и карточек------------------------
 
 Promise.all([api.getProfileData(), api.getCards()])
   .then(([profile, cards]) => {
     user = profile;
-    const cardList = new Section(
+
+    /*const cardList = new Section(               <<<<<<<<< new Section теперь можно создать глобально
       {
-        data: cards,
+        data: cards,                                                <<<<<<<<< ведь data больше не нужен
         renderer: (item) => {
           const card = new Card(item, user, api, "#card", handleClickImage);
           const cardElement = card.generate();
@@ -176,7 +179,7 @@ Promise.all([api.getProfileData(), api.getCards()])
         },
       },
       ".gallery"
-    );
+    );*/
 
     cardList.renderItems(cards); //добавляем карточки в созданный контейнер (классом Section)
     userInfo.setUserInfo(profile); //принимает новые даннные пользователя и отправляет их на страницу
@@ -184,5 +187,3 @@ Promise.all([api.getProfileData(), api.getCards()])
   .catch((err) => {
     console.log(err);
   });
-
-//--------------------------------------------------------------------------------------------------
