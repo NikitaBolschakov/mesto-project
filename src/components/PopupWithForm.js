@@ -1,32 +1,44 @@
 import Popup from "./Popup";
-import { renderLoading } from "./utils.js";
-import { avatarSaveButton } from "./constants.js";
 
 export default class PopupWithForm extends Popup {
-  constructor(popup, submitForm, form) {
+  constructor(popup, submitForm) {
     super(popup);
     this._submitForm = submitForm;
-    this._form = form;
+    this._form = this._popup.querySelector(".popup__form");
+    this._saveButton = this._popup.querySelector(".popup__button-submit");
+    this._formInputs = Array.from(
+      this._popup.querySelectorAll(".popup__field")
+    );
   }
 
   _getInputValues() {
-    //собирает значение полей формы
-    const formInputs = Array.from(
-      this._popup.querySelectorAll(".popup__field")
+    this._formValues = {};
+    this._formInputs.forEach(
+      (input) => (this._formValues[input.name] = input.value)
     );
-    return formInputs;
+    return this._formValues;
   }
 
   close() {
     super.close();
-    this._popup.querySelector(".popup__form").reset();
+    this._form.reset();
   }
 
-  setEventListeners = (buttonClose, form) => {
-    super.setEventListeners(buttonClose);
-    form.addEventListener("submit", (evt) => {
+  renderLoading = (isLoading, buttonText = "") => {
+    if (isLoading) {
+      this._saveButton.textContent = "Сохранение...";
+      this._saveButton.disabled = true;
+    } else {
+      this._saveButton.textContent = buttonText;
+      this._saveButton.disabled = false;
+    }
+  };
+
+  setEventListeners = () => {
+    super.setEventListeners();
+    this._form.addEventListener("submit", (evt) => {
       evt.preventDefault();
-      renderLoading(true, avatarSaveButton);
+      this.renderLoading(true);
       this._submitForm(this._getInputValues());
     });
   };

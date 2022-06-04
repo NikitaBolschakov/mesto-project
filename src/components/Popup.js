@@ -23,14 +23,13 @@ export default class Popup {
   };
 
   _handleOvlClose = (evt) => {
-    //и здесь тоже стрелочная
-    const popupOpened = document.querySelector(".popup_opened");
-    if (evt.target === popupOpened) {
+    if (evt.target === this._popup) {
       this.close();
     }
   };
 
-  setEventListeners(buttonClose) {
+  setEventListeners() {
+    const buttonClose = this._popup.querySelector(".popup__button-close");
     buttonClose.addEventListener("click", () => {
       this.close();
     });

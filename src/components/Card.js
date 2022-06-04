@@ -28,21 +28,18 @@ export default class Card {
     this._setEventListeners(); //установили на карточку все слушатели
 
     //DOM элементы карточки
-    const titleCardElement = this._element.querySelector(".element__title");
-    const imageCardElement = this._element.querySelector(".element__image");
-    const likeCounter = this._element.querySelector(".element__counter");
-    const deleteButton = this._element.querySelector(".element__button-delete");
-    const likeButton = this._element.querySelector(".element__button-like");
+    this._titleCardElement = this._element.querySelector(".element__title");
+    this._likeCounter = this._element.querySelector(".element__counter");
 
     //теперь в шаблон разметки добавляем полученные данные карточки
-    titleCardElement.textContent = this._name; //название
-    imageCardElement.alt = this._name; //название в атрибут alt
-    imageCardElement.src = this._link; //картинка
-    likeCounter.textContent = this._counter; //кол-во лайков
+    this._titleCardElement.textContent = this._name; //название
+    this._imageCardElement.alt = this._name; //название в атрибут alt
+    this._imageCardElement.src = this._link; //картинка
+    this._likeCounter.textContent = this._counter; //кол-во лайков
 
     //добавляем условие появления кнопки делит
     if (this._ownerId === this._userId) {
-      deleteButton.style.display = "block";
+      this._deleteButton.style.display = "block";
     }
 
     //проверка массива this._likes на наличие лайка пользователя
@@ -52,7 +49,7 @@ export default class Card {
 
     //активируем лайк если isUserLiked = true
     if (isUserLiked) {
-      likeButton.classList.add("element__button-like_active");
+      this._likeButton.classList.add("element__button-like_active");
     }
 
     return this._element; //возвращаем полностью готовую карточку
@@ -60,52 +57,39 @@ export default class Card {
 
   //Метод устанавливает слушатели событий
   _setEventListeners() {
+    this._likeButton = this._element.querySelector(".element__button-like");
+    this._deleteButton = this._element.querySelector(".element__button-delete");
+    this._imageCardElement = this._element.querySelector(".element__image");
     //слушатель на лайк
-    this._element
-      .querySelector(".element__button-like")
-      .addEventListener("click", () => {
-        this._handleToggleLike();
-      });
+    this._likeButton.addEventListener("click", () => {
+      this._handleToggleLike();
+    });
     //слушатель на открытие попапа с изображением
-    this._element
-      .querySelector(".element__image")
-      .addEventListener("click", () => {
-        this._handleClickImage(this._name, this._link);
-      });
+    this._imageCardElement.addEventListener("click", () => {
+      this._handleClickImage(this._name, this._link);
+    });
     //слушатель на кнопку делит
-    this._element
-      .querySelector(".element__button-delete")
-      .addEventListener("click", () => {
-        this._handleRemoveCard();
-      });
+    this._deleteButton.addEventListener("click", () => {
+      this._handleRemoveCard();
+    });
   }
 
   //метод обработчик на лайк
   _handleToggleLike() {
-    if (
-      this._element
-        .querySelector(".element__button-like")
-        .classList.contains("element__button-like_active")
-    ) {
+    if (this._likeButton.classList.contains("element__button-like_active")) {
       this._api
         .deleteLike(this._id)
         .then((data) => {
-          this._element.querySelector(".element__counter").textContent =
-            data.likes.length;
-          this._element
-            .querySelector(".element__button-like")
-            .classList.remove("element__button-like_active");
+          this._likeCounter.textContent = data.likes.length;
+          this._likeButton.classList.remove("element__button-like_active");
         })
         .catch((err) => console.log(err));
     } else {
       this._api
         .putLike(this._id)
         .then((data) => {
-          this._element.querySelector(".element__counter").textContent =
-            data.likes.length;
-          this._element
-            .querySelector(".element__button-like")
-            .classList.add("element__button-like_active");
+          this._likeCounter.textContent = data.likes.length;
+          this._likeButton.classList.add("element__button-like_active");
         })
         .catch((err) => console.log(err));
     }
@@ -120,7 +104,7 @@ export default class Card {
   _handleRemoveCard() {
     this._api
       .deleteCard(this._id)
-      .then(this._removeCard(this._element))
+      .then(() => this._removeCard(this._element))
       .catch((err) => {
         console.log(err);
       });

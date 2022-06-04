@@ -1,18 +1,24 @@
 export default class Section {
-  constructor({ data, renderer }, selector) {
-    //принимает объект и колбек-инструкцию, + селектор контейнера
-    this._renderedItems = data; //массив карточек
-    this._renderer = renderer; //инструкция в index.js, отвечает за отрисовку отдельного элемента
-    this._container = document.querySelector(selector); //контейнер, в котором все отрисуем
+  constructor({ renderer }, selector) {
+    this._renderer = renderer;
+    this._container = document.querySelector(selector);
+  }
+
+  //принимает DOM элемент, генерирует и добавляет в контейнер
+  _addItem(item) {
+    const card = this._renderer(item);
+    this._container.append(card);
+  }
+  //отрисовка карточки
+  prependItem(item) {
+    const card = this._renderer(item);
+    this._container.prepend(card);
   }
 
   //отвечает за отрисовку всех элементов
-  renderItems() {
-    this._renderedItems.forEach((item) => this._renderer(item));
-  }
-
-  //принимает DOM элемент и добавляет его в контейнер
-  addItem(item) {
-    this._container.append(item);
+  renderItems(cards) {
+    cards.forEach((item) => {
+      this._addItem(item);
+    });
   }
 }
