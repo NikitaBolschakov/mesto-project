@@ -25,6 +25,7 @@ const userInfo = new UserInfo({
   nameElement: ".profile__name",
   statusElement: ".profile__status",
   avatarElement: ".profile__avatar",
+
 });
 
 const cardList = new Section(
@@ -80,7 +81,6 @@ const createNewAvatar = (inputsObj) => {
 const handleProfileFormSubmit = (inputsObj) => {
   const nameValue = inputsObj.name;
   const jobValue = inputsObj.status;
-
   api
     .patchProfileData(nameValue, jobValue) //Отправляем на сервер новые данные
     .then((res) => {
@@ -128,6 +128,7 @@ popupAddCard.setEventListeners();
 //-------------------------------------- попап открытия картинки ----------------------------------
 
 const popupWithImage = new PopupWithImage(popupImage);
+
 popupWithImage.setEventListeners();
 
 //------------------------------------------ попап аватара ----------------------------------------
@@ -159,6 +160,7 @@ const enableValidation = (validationConfig) => {
 };
 
 enableValidation(validationConfig);
+
 
 //--------------------------------- получение данных пользователя и карточек------------------------
 
